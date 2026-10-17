@@ -267,7 +267,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
         <dt>도자주</dt><dd>5 g/L <span class="lbl">라벨</span></dd>
         <dt>마시기</dt><dd>8~10°C</dd>
         <dt>병입</dt><dd>2021년 5월</dd>
-        <dt>디스고징</dt><dd>2024년 10월</dd>
+        <dt>데고르주망</dt><dd>2024년 10월</dd>
         <dt>병 속 숙성</dt><dd>약 41개월 <span class="lbl">라벨 날짜로 계산</span></dd>
       </dl>
     </article>
@@ -282,7 +282,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
         <dt>도자주</dt><dd>3 g/L <span class="lbl">라벨</span></dd>
         <dt>마시기</dt><dd>10~12°C, 큰 잔</dd>
         <dt>병입</dt><dd>2017년 5월</dd>
-        <dt>디스고징</dt><dd>2022년 9월</dd>
+        <dt>데고르주망</dt><dd>2022년 9월</dd>
         <dt>병 속 숙성</dt><dd>약 64개월 <span class="lbl">라벨 날짜로 계산</span></dd>
       </dl>
     </article>
@@ -307,9 +307,9 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
       <button class="btn ghost" id="retry" type="button">내 답 다시 고르기</button>
     </div>
     <div class="result" id="result" hidden></div>
-    <p class="note">점수 = 맞힌 개수 − 노트에 없는 것을 고른 개수. 다 찍으면 손해입니다. 정답 기준은 평론가·판매처 시음 노트에 실제로 나온 표현이고, 빈티지·디스고징 시기에 따라 달라질 수 있습니다.</p>
+    <p class="note">점수 = 맞힌 개수 − 노트에 없는 것을 고른 개수. 다 찍으면 손해입니다. 정답 기준은 평론가·판매처 시음 노트에 실제로 나온 표현이고, 빈티지·데고르주망 시기에 따라 달라질 수 있습니다.</p>
     <label for="memo" class="eyebrow">메모</label>
-    <textarea id="memo" placeholder="디스고징 날짜, 온도, 페어링, 첫인상…"></textarea>
+    <textarea id="memo" placeholder="데고르주망 날짜, 온도, 페어링, 첫인상…"></textarea>
     <div class="rowbtns"><button class="btn ghost" id="reset" type="button">전체 기록 지우기</button></div>
   </div>
 </section>
@@ -354,7 +354,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98kL4ugSZ6cUC6ay936lSzSQ0IWGN65JXPwUcuOtls7EAQ/exec';
 /* ===================================================================================== */
 (function(){
-  var APP_VERSION='v1.5';
+  var APP_VERSION='v1.6';
   var LKEY='agrapart-aroma-5p-v1';
   var PLAYERS=['영광','상민','정인','유진','호빈'];
   var PKEY={'영광':'yk','상민':'sm','정인':'ji','유진':'yj','호빈':'hb'};
@@ -618,7 +618,7 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
     {q:'10여 ha의 밭은 대략 몇 조각으로 나뉘어 있을까?',o:['약 5개','약 15개','약 60개','약 300개'],a:2,e:'자료에 따라 60~62개 구획. 그랑크뤼 마을 곳곳에 흩어져 있습니다.'},
     {q:'Minéral을 이루는 두 구획의 조합은?',o:['Champboutons(Avize) + Bionnes(Cramant)','La Fosse aux Pourceaux + Oger','Avize + Oiry','Vénus 구획 + Complantée 구획'],a:0,e:'Avize의 Champboutons와 Cramant의 Bionnes입니다.'},
     {q:'2025년, 블랑 드 블랑의 집에서 처음 나온 와인은?',o:['100% 뫼니에 샴페인','스틸 레드와 로제','디저트 와인','라타피아'],a:1,e:'아들 Ambroise가 Avenay-Val-d\'Or의 피노 누아로 Coteaux Champenois 레드와 로제를 냈습니다.'},
-    {q:'오늘 두 병 중 디스고징(효모 찌꺼기를 빼낸 날)이 더 최근인 병은?',o:['Terroirs','Minéral','같은 날','라벨에 없다'],a:0,e:'뒷라벨 기준 Terroirs는 2024년 10월, Minéral 2016은 2022년 9월에 디스고징했습니다.'}
+    {q:'오늘 두 병 중 데고르주망(효모 찌꺼기를 빼낸 날)이 더 최근인 병은?',o:['Terroirs','Minéral','같은 날','라벨에 없다'],a:0,e:'뒷라벨 기준 Terroirs는 2024년 10월, Minéral 2016은 2022년 9월에 데고르주망했습니다.'}
   ];
   var box=document.getElementById('quizbox'),idx=0,qscore=0;
   function render2(){
