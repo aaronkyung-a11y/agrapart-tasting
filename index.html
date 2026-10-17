@@ -33,6 +33,14 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
 .dot.grey{background:var(--muted);opacity:.6}
 a.btn{text-decoration:none;display:inline-block}
 .mapfallback{padding:18px;font-size:14px}
+
+.mapview{margin-bottom:-4px}
+.mapview .tab{font-size:14px;padding:5px 14px}
+.mapview .tab[aria-pressed="true"]{background:var(--gold-soft);color:var(--ink);box-shadow:inset 0 -3px 0 var(--gold)}
+.dot.region{background:var(--flint)}
+.vlabel.region{font-family:var(--body);font-size:12px;background:var(--flint-soft);border-color:var(--flint)}
+.vlabel.cdb{background:var(--gold-soft);border-color:var(--gold)}
+.vlabel.region b{font-family:var(--display);font-size:13px}
 </style>
 <title>Agrapart 시음 노트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -259,18 +267,24 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
   <div class="eyebrow">어디에 있나</div>
   <h2>에페르네 남쪽, 백악 비탈 위의 네 마을</h2>
   <p class="muted">Terroirs는 네 그랑크뤼 마을의 포도를 섞고, Minéral은 그중 Avize와 Cramant의 두 구획에서만 나옵니다. 마을 사이 거리는 차로 몇 분입니다.</p>
+  <div class="tabs mapview" role="group" aria-label="지도 범위">
+    <button type="button" class="tab t" id="mv-near" aria-pressed="true">Côte des Blancs</button>
+    <button type="button" class="tab t" id="mv-wide" aria-pressed="false">샹파뉴 전체</button>
+  </div>
   <div class="mapbox"><div id="leaf" role="img" aria-label="Côte des Blancs 지도: Épernay 남쪽의 Cramant, Avize, Oger와 북동쪽의 Oiry"></div></div>
   <div class="maplegend">
     <span><i class="dot gold"></i>Terroirs 마을</span>
     <span><i class="dot ring"></i>Minéral 구획이 있는 마을</span>
     <span><i class="dot home"></i>아그라파 (Avize)</span>
     <span><i class="dot grey"></i>참고 지점</span>
+    <span class="widehint" hidden><i class="dot region"></i>샹파뉴 주요 산지 (대표 마을 위치) · 점을 누르면 이름</span>
   </div>
   <div class="rowbtns">
     <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Champagne+Agrapart+57+Avenue+Jean+Jaur%C3%A8s+51190+Avize" target="_blank" rel="noopener">Google 지도에서 아그라파 보기</a>
     <a class="btn ghost" href="https://www.google.com/maps/dir/?api=1&amp;origin=%C3%89pernay&amp;destination=Avize&amp;travelmode=driving" target="_blank" rel="noopener">Épernay → Avize 길찾기</a>
   </div>
-  <p class="note">마을 위치는 마을 중심 기준입니다. Champboutons·Bionnes 구획의 정확한 경계는 표시하지 않았습니다. 지도 © OpenStreetMap 기여자.</p>
+  <p class="muted widetext" hidden style="font-size:14px">Avize는 샹파뉴의 한가운데쯤입니다. 북쪽 Reims까지 직선 약 32km, 파리까지 약 122km. 남쪽 Aube의 Côte des Bar(Les Riceys)는 약 112km 떨어진 별개의 산지입니다. 앞서 비교한 Egly-Ouriet의 Ambonnay는 약 17km 북동쪽 Montagne de Reims 남쪽 비탈에 있습니다.</p>
+  <p class="note">마을 위치는 마을 중심 기준이고, 거리는 좌표로 계산한 직선거리입니다. Champboutons·Bionnes 구획의 정확한 경계는 표시하지 않았습니다. 지도 © OpenStreetMap 기여자.</p>
 </section>
 
 <section id="stories">
@@ -390,7 +404,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98kL4ugSZ6cUC6ay936lSzSQ0IWGN65JXPwUcuOtls7EAQ/exec';
 /* ===================================================================================== */
 (function(){
-  var APP_VERSION='v1.7';
+  var APP_VERSION='v1.8';
   var LKEY='agrapart-aroma-5p-v1';
   var PLAYERS=['영광','상민','정인','유진','호빈'];
   var PKEY={'영광':'yk','상민':'sm','정인':'ji','유진':'yj','호빈':'hb'};
@@ -722,7 +736,35 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
   });
   var home=L.circleMarker([48.9740,4.0186],{radius:6,color:C.paper,weight:2,fillColor:C.ink,fillOpacity:1}).addTo(map);
   home.bindPopup('<b>Champagne Agrapart</b><br>57 Avenue Jean Jaurès, Avize<br><a href="https://www.google.com/maps/search/?api=1&query=Champagne+Agrapart+57+Avenue+Jean+Jaur%C3%A8s+51190+Avize" target="_blank" rel="noopener">Google 지도에서 열기</a>');
-  map.fitBounds(L.latLngBounds(pts).pad(0.1));
+  var nearB=L.latLngBounds(pts).pad(0.1);
+  var wide=L.layerGroup();
+  var R=[
+    {n:'Montagne de Reims',town:'Verzenay',lat:49.1594,lng:4.1443,d:'right',o:[10,-6]},
+    {n:'Vallée de la Marne',town:'Châtillon-sur-Marne',lat:49.0990,lng:3.7584,d:'left'},
+    {n:'Côte de Sézanne',town:'Sézanne',lat:48.7241,lng:3.7223,d:'left'},
+    {n:'Côte des Bar',town:'Les Riceys',lat:47.9945,lng:4.3658,d:'right'}
+  ];
+  R.forEach(function(r){
+    L.circleMarker([r.lat,r.lng],{radius:7,color:C.paper,weight:2,fillColor:C.flint,fillOpacity:1}).addTo(wide).bindPopup(r.n+'<br>대표 마을: '+r.town)
+      .bindTooltip('<b>'+r.n+'</b>',{permanent:true,direction:r.d,offset:r.o||[r.d==='left'?-10:10,0],className:'vlabel region'});
+  });
+  [{n:'Reims',lat:49.2578,lng:4.0319,d:'top',o:[0,-6]},{n:'Troyes',lat:48.2972,lng:4.0746,d:'left'},{n:'Ambonnay (Egly-Ouriet)',lat:49.0773,lng:4.1724,d:'right',tap:true}].forEach(function(t){
+    L.circleMarker([t.lat,t.lng],{radius:5,color:C.paper,weight:2,fillColor:C.muted,fillOpacity:.8}).addTo(wide)
+      .bindTooltip(t.n,{permanent:!t.tap,direction:t.d,offset:t.o||[t.d==='left'?-10:10,0],className:'vlabel'});
+  });
+  var cdb=L.rectangle(nearB,{color:C.gold,weight:2,fillColor:C.gold,fillOpacity:.15,interactive:false});
+  var cdbLabel=L.marker([nearB.getSouth(),nearB.getCenter().lng],{opacity:0,interactive:false}).bindTooltip('<b>Côte des Blancs</b> · Avize',{permanent:true,direction:'bottom',offset:[0,4],className:'vlabel cdb'});
+  var nearLayers=[];map.eachLayer(function(l){if(!(l instanceof L.TileLayer))nearLayers.push(l)});
+  var bN=document.getElementById('mv-near'),bW=document.getElementById('mv-wide');
+  function show(w){
+    bN.setAttribute('aria-pressed',!w);bW.setAttribute('aria-pressed',!!w);
+    document.querySelector('.widehint').hidden=!w;document.querySelector('.widetext').hidden=!w;
+    nearLayers.forEach(function(l){w?map.removeLayer(l):l.addTo(map)});
+    if(w){wide.addTo(map);cdb.addTo(map);cdbLabel.addTo(map);map.fitBounds(L.latLngBounds([[49.30,3.68],[47.97,4.42]]),{paddingTopLeft:[4,26],paddingBottomRight:[4,4]})}
+    else{map.removeLayer(wide);map.removeLayer(cdb);map.removeLayer(cdbLabel);map.fitBounds(nearB)}
+  }
+  bN.onclick=function(){show(false)};bW.onclick=function(){show(true)};
+  map.fitBounds(nearB);
   }
   if(document.readyState==='complete')init();else window.addEventListener('load',init);
 })();

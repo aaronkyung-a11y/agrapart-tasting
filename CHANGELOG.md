@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.8 — 2026-10-18
+- 지도에 "샹파뉴 전체" 보기 추가: Montagne de Reims, Vallée de la Marne, Côte de Sézanne, Côte des Bar 대표 마을과 Côte des Blancs 범위 표시, Reims·Troyes 기준점, Ambonnay(Egly-Ouriet)
+- 거리 안내(좌표 기준 직선거리): Reims 약 32km, 파리 약 122km, Les Riceys 약 112km, Ambonnay 약 17km
+
 ## v1.7 — 2026-10-18
 - "어디에 있나" 지도 섹션 추가 (Leaflet + OpenStreetMap): Terroirs 4개 그랑크뤼 마을, Minéral 구획 마을(Avize·Cramant) 강조, 아그라파 위치, 참고 지점(Épernay, Le Mesnil, Avenay-Val-d'Or)
 - Google 지도 열기·Épernay→Avize 길찾기 버튼
