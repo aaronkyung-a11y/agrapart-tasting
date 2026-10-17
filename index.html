@@ -17,6 +17,22 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
 .bottle{margin:0 -18px 4px;background:linear-gradient(var(--chalk),var(--paper));display:flex;justify-content:center;border-bottom:1px solid var(--line)}
 .bottle img{display:block;height:300px;width:auto;max-width:100%;object-fit:contain}
 .lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;white-space:nowrap}
+
+.mapbox{border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--line)}
+#leaf{height:380px;width:100%}
+@media (max-width:520px){#leaf{height:320px}}
+.leaflet-container{font-family:var(--body);background:var(--chalk)}
+.vlabel{background:var(--paper);color:var(--ink);border:1px solid var(--line);box-shadow:none;font-family:var(--display);font-size:13px;padding:1px 6px;border-radius:3px}
+.vlabel::before{display:none}
+.vlabel small{font-family:var(--mono);font-size:10px;color:var(--muted);margin-left:4px}
+.maplegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted)}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.dot.gold{background:var(--gold)}
+.dot.ring{background:var(--gold);box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--flint)}
+.dot.home{background:var(--ink)}
+.dot.grey{background:var(--muted);opacity:.6}
+a.btn{text-decoration:none;display:inline-block}
+.mapfallback{padding:18px;font-size:14px}
 </style>
 <title>Agrapart 시음 노트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -202,6 +218,8 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 .board tr.wait td{color:var(--muted);font-size:13px;text-align:left}
 .crown{color:var(--gold);margin-left:4px;font-size:12px}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
 </head>
 <body>
 
@@ -218,7 +236,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 </header>
 
 <nav aria-label="섹션">
-  <a href="#who">어떤 생산자</a><a href="#stories">에피소드</a><a href="#bottles">오늘의 두 병</a><a href="#taste">블라인드 향 퀴즈</a><a href="#quiz">상식 퀴즈</a>
+  <a href="#who">어떤 생산자</a><a href="#map">지도</a><a href="#stories">에피소드</a><a href="#bottles">오늘의 두 병</a><a href="#taste">블라인드 향 퀴즈</a><a href="#quiz">상식 퀴즈</a>
 </nav>
 
 <section id="who">
@@ -235,6 +253,24 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
       <div class="story"><span class="kicker">처음부터 자기 라벨</span><h3>남의 이름으로 판 적이 없다</h3><p>많은 재배자가 최근에야 자가 병입을 시작했지만, 이 집은 시작부터 자기 이름으로 병입했습니다.</p></div>
     </div>
   </div>
+</section>
+
+<section id="map">
+  <div class="eyebrow">어디에 있나</div>
+  <h2>에페르네 남쪽, 백악 비탈 위의 네 마을</h2>
+  <p class="muted">Terroirs는 네 그랑크뤼 마을의 포도를 섞고, Minéral은 그중 Avize와 Cramant의 두 구획에서만 나옵니다. 마을 사이 거리는 차로 몇 분입니다.</p>
+  <div class="mapbox"><div id="leaf" role="img" aria-label="Côte des Blancs 지도: Épernay 남쪽의 Cramant, Avize, Oger와 북동쪽의 Oiry"></div></div>
+  <div class="maplegend">
+    <span><i class="dot gold"></i>Terroirs 마을</span>
+    <span><i class="dot ring"></i>Minéral 구획이 있는 마을</span>
+    <span><i class="dot home"></i>아그라파 (Avize)</span>
+    <span><i class="dot grey"></i>참고 지점</span>
+  </div>
+  <div class="rowbtns">
+    <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Champagne+Agrapart+57+Avenue+Jean+Jaur%C3%A8s+51190+Avize" target="_blank" rel="noopener">Google 지도에서 아그라파 보기</a>
+    <a class="btn ghost" href="https://www.google.com/maps/dir/?api=1&amp;origin=%C3%89pernay&amp;destination=Avize&amp;travelmode=driving" target="_blank" rel="noopener">Épernay → Avize 길찾기</a>
+  </div>
+  <p class="note">마을 위치는 마을 중심 기준입니다. Champboutons·Bionnes 구획의 정확한 경계는 표시하지 않았습니다. 지도 © OpenStreetMap 기여자.</p>
 </section>
 
 <section id="stories">
@@ -354,7 +390,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98kL4ugSZ6cUC6ay936lSzSQ0IWGN65JXPwUcuOtls7EAQ/exec';
 /* ===================================================================================== */
 (function(){
-  var APP_VERSION='v1.6';
+  var APP_VERSION='v1.7';
   var LKEY='agrapart-aroma-5p-v1';
   var PLAYERS=['영광','상민','정인','유진','호빈'];
   var PKEY={'영광':'yk','상민':'sm','정인':'ji','유진':'yj','호빈':'hb'};
@@ -654,6 +690,41 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
     box.append(h,bar,q,opts,ex,next);
   }
   render2();
+})();
+</script>
+<script>
+/* map */
+(function(){
+  function init(){
+  var el=document.getElementById('leaf');if(!el||el._done)return;el._done=true;
+  if(!window.L){el.innerHTML='<div class="mapfallback">지도를 불러오지 못했습니다. 아래 Google 지도 버튼으로 열어 보세요.</div>';el.style.height='auto';return}
+  var css=getComputedStyle(document.documentElement);
+  var C={gold:css.getPropertyValue('--gold').trim(),flint:css.getPropertyValue('--flint').trim(),ink:css.getPropertyValue('--ink').trim(),muted:css.getPropertyValue('--muted').trim(),paper:css.getPropertyValue('--paper').trim()};
+  var map=L.map(el,{scrollWheelZoom:false,zoomControl:true});
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:17,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+  var V=[
+    {n:'Avize',lat:48.9722,lng:4.0101,t:'gold',m:true,sub:'GC · Champboutons'},
+    {n:'Cramant',lat:48.9877,lng:3.9921,t:'gold',m:true,sub:'GC · Bionnes',left:true},
+    {n:'Oger',lat:48.9545,lng:4.0089,t:'gold',sub:'GC',left:true},
+    {n:'Oiry',lat:49.0234,lng:4.0473,t:'gold',sub:'GC'},
+    {n:'Épernay',lat:49.0426,lng:3.9529,t:'grey',sub:'',left:true},
+    {n:'Le Mesnil-sur-Oger',lat:48.9463,lng:4.0212,t:'grey',sub:'참고',dir:'bottom'},
+    {n:'Avenay-Val-d\'Or',lat:49.0687,lng:4.0474,t:'grey',sub:'피노 누아'}
+  ];
+  var pts=[];
+  V.forEach(function(v){
+    var gold=v.t==='gold';
+    if(v.m)L.circleMarker([v.lat,v.lng],{radius:13,color:C.flint,weight:3,fill:false,interactive:false}).addTo(map);
+    var mk=L.circleMarker([v.lat,v.lng],{radius:gold?8:5,color:C.paper,weight:2,fillColor:gold?C.gold:C.muted,fillOpacity:gold?1:.75}).addTo(map);
+    mk.bindTooltip(v.n+(v.sub?'<small>'+v.sub+'</small>':''),{permanent:true,direction:v.dir||(v.left?'left':'right'),offset:v.dir==='bottom'?[0,8]:[v.left?-12:12,0],className:'vlabel'});
+    pts.push([v.lat,v.lng]);
+  });
+  var home=L.circleMarker([48.9740,4.0186],{radius:6,color:C.paper,weight:2,fillColor:C.ink,fillOpacity:1}).addTo(map);
+  home.bindPopup('<b>Champagne Agrapart</b><br>57 Avenue Jean Jaurès, Avize<br><a href="https://www.google.com/maps/search/?api=1&query=Champagne+Agrapart+57+Avenue+Jean+Jaur%C3%A8s+51190+Avize" target="_blank" rel="noopener">Google 지도에서 열기</a>');
+  map.fitBounds(L.latLngBounds(pts).pad(0.1));
+  }
+  if(document.readyState==='complete')init();else window.addEventListener('load',init);
 })();
 </script>
 

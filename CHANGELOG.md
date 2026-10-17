@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.7 — 2026-10-18
+- "어디에 있나" 지도 섹션 추가 (Leaflet + OpenStreetMap): Terroirs 4개 그랑크뤼 마을, Minéral 구획 마을(Avize·Cramant) 강조, 아그라파 위치, 참고 지점(Épernay, Le Mesnil, Avenay-Val-d'Or)
+- Google 지도 열기·Épernay→Avize 길찾기 버튼
+
 ## v1.6 — 2026-10-17
 - 표기 변경: 디스고징 → 데고르주망 (dégorgement)
 
