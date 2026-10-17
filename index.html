@@ -187,6 +187,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 .board td{padding:7px 6px;text-align:right;border-bottom:1px solid var(--line)}
 .board tr.top td{font-weight:600}
 .board td.sc{font-family:var(--display);font-size:18px}
+.board tr.wait td{color:var(--muted);font-size:13px;text-align:left}
 .crown{color:var(--gold);margin-left:4px;font-size:12px}
 </style>
 </head>
@@ -274,8 +275,8 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
     <p class="muted" id="howto" style="font-size:13.5px"></p>
     <div class="group" id="chips"></div>
     <div class="rowbtns">
-      <button class="btn" id="check" type="button">확인하고 점수 보기</button>
-      <button class="btn ghost" id="retry" type="button">이 잔 다시 하기</button>
+      <button class="btn" id="check" type="button">제출하고 점수 보기</button>
+      <button class="btn ghost" id="retry" type="button">내 답 다시 고르기</button>
     </div>
     <div class="result" id="result" hidden></div>
     <p class="note">점수 = 맞힌 개수 − 노트에 없는 것을 고른 개수. 다 찍으면 손해입니다. 정답 기준은 평론가·판매처 시음 노트에 실제로 나온 표현이고, 빈티지·디스고징 시기에 따라 달라질 수 있습니다.</p>
@@ -315,7 +316,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98kL4ugSZ6cUC6ay936lSzSQ0IWGN65JXPwUcuOtls7EAQ/exec';
 /* ===================================================================================== */
 (function(){
-  var APP_VERSION='v1.1';
+  var APP_VERSION='v1.2';
   var LKEY='agrapart-aroma-5p-v1';
   var PLAYERS=['영광','상민','정인','유진','호빈'];
   var PKEY={'영광':'yk','상민':'sm','정인':'ji','유진':'yj','호빈':'hb'};
@@ -323,44 +324,46 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
   function lsave(s){try{localStorage.setItem(LKEY,JSON.stringify(s))}catch(e){}}
   function blank(){var o={};PLAYERS.forEach(function(p){o[p]=[]});return o}
   var local=lload();
-  var state={sel:{t:blank(),m:blank()},done:{t:false,m:false},cur:local.cur||'t',
+  function blankB(){var o={};PLAYERS.forEach(function(p){o[p]=false});return o}
+  var state={sel:{t:blank(),m:blank()},lock:{t:blankB(),m:blankB()},cur:local.cur||'t',
     player:PLAYERS.indexOf(local.player)>-1?local.player:PLAYERS[0],memo:local.memo||''};
-  var db=null,shared=false,readOnly=false;
+  var shared=false,readOnly=false;
   function save(){lsave({cur:state.cur,player:state.player,memo:state.memo,
-    sel:shared?undefined:state.sel,done:shared?undefined:state.done})}
-  if(local.sel&&local.sel.t){state.sel=local.sel;['t','m'].forEach(function(k){PLAYERS.forEach(function(p){state.sel[k][p]=state.sel[k][p]||[]})})}
-  if(local.done)state.done=local.done;
+    sel:shared?undefined:state.sel,lock:shared?undefined:state.lock})}
+  if(local.sel&&local.sel.t){['t','m'].forEach(function(k){PLAYERS.forEach(function(p){state.sel[k][p]=(local.sel[k]&&local.sel[k][p])||[]})})}
+  if(local.lock&&local.lock.t){['t','m'].forEach(function(k){PLAYERS.forEach(function(p){state.lock[k][p]=!!(local.lock[k]&&local.lock[k][p])})})}
 
-  /* shared writes via Google Sheets (Apps Script web app) */
-  var pend={},busy={},dirty={},pollTimer=null;
+  /* shared writes via Google Sheets (Apps Script web app).
+     제출 여부는 sel 배열 안의 '__locked' 표식으로 저장 (Apps Script 재배포 불필요) */
+  var LOCK='__locked';
+  var pend={},busy={},dirty={},pollTimer=null,saving={},wrote={},resetAt=0;
   function post(body){
     return fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)})
       .then(function(r){return r.json()}).then(function(j){if(!j||!j.ok)throw new Error((j&&j.error)||'fail');return j});
   }
-  function queuePick(side,p){
-    if(!shared){save();return}
+  function pending(k){return !!(dirty[k]||busy[k])}
+  function queuePick(side,p,now){
+    if(!shared){save();return Promise.resolve()}
     var k=side+'|'+p;dirty[k]=true;clearTimeout(pend[k]);
+    if(now)return flush(side,p);
     pend[k]=setTimeout(function(){flush(side,p)},400);
+    return Promise.resolve();
   }
   function flush(side,p){
-    var k=side+'|'+p;if(busy[k])return;
-    busy[k]=true;dirty[k]=false;
-    post({action:'pick',side:side,player:p,sel:state.sel[side][p].slice()}).catch(writeFail).then(function(){
-      busy[k]=false;if(dirty[k])flush(side,p);
-    });
-  }
-  var doneLock=0;
-  function writeGame(){
-    if(!shared){save();return Promise.resolve()}
-    doneLock=Date.now();
-    return post({action:'done',done:{t:!!state.done.t,m:!!state.done.m}}).catch(writeFail);
+    var k=side+'|'+p;
+    if(busy[k])return busy[k];
+    dirty[k]=false;
+    var payload=state.sel[side][p].slice();if(state.lock[side][p])payload.push(LOCK);
+    busy[k]=post({action:'pick',side:side,player:p,sel:payload}).then(function(){
+      wrote[k]=Date.now();busy[k]=null;if(dirty[k])return flush(side,p);
+    },function(e){busy[k]=null;dirty[k]=false;throw e});
+    return busy[k];
   }
   function resetShared(side){
     if(!shared)return;
-    doneLock=Date.now();
-    post({action:'reset',side:side}).catch(writeFail);
+    ['t','m'].forEach(function(sd){if(side==='all'||side===sd)PLAYERS.forEach(function(p){var k=sd+'|'+p;dirty[k]=false;clearTimeout(pend[k])})});
+    post({action:'reset',side:side}).then(function(){resetAt=Date.now()}).catch(function(){setStatus('초기화를 저장하지 못했습니다. 다시 눌러 주세요.')});
   }
-  function writeFail(){setStatus('저장에 실패했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.')}
   function setStatus(t){var el=document.getElementById('sync');if(el)el.textContent=t}
 
   /* [id, 표시명, Terroirs 노트, Minéral 노트] 빈 값 = 그 와인 노트에 없음 */
@@ -413,22 +416,27 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
   var chipsEl=document.getElementById('chips'),resEl=document.getElementById('result'),plEl=document.getElementById('players'),howto=document.getElementById('howto');
   var tabT=document.getElementById('tab-t'),tabM=document.getElementById('tab-m');
   var checkBtn=document.getElementById('check'),retryBtn=document.getElementById('retry');
-  var retryArmed=false;
+  var retryArmed=false,errMsg='';
 
   function render(){
-    var side=state.cur,done=state.done[side],p=state.player,sel=state.sel[side][p];
+    var side=state.cur,p=state.player,sel=state.sel[side][p],mine=state.lock[side][p];
+    var k=side+'|'+p;
     tabT.setAttribute('aria-selected',side==='t');tabM.setAttribute('aria-selected',side==='m');
     plEl.innerHTML='';
     PLAYERS.forEach(function(name){
       var b=document.createElement('button');b.type='button';b.className='pl';
       b.setAttribute('aria-pressed',name===p?'true':'false');
-      var sub=done?(score(side,name).total+'점'):(state.sel[side][name].length?'제출 '+state.sel[side][name].length+'개':'대기');
+      var lk=state.lock[side][name],n=state.sel[side][name].length;
+      var sub=lk?(mine?score(side,name).total+'점':'제출 완료'):(n?'고르는 중':'대기');
       b.innerHTML='<b></b><small></small>';b.querySelector('b').textContent=name;b.querySelector('small').textContent=sub;
-      b.onclick=function(){state.player=name;save();render()};
+      b.onclick=function(){state.player=name;errMsg='';save();render()};
       plEl.appendChild(b);
     });
-    howto.textContent=done?(p+'의 답안입니다. 다른 이름을 누르면 그 사람 답안을 볼 수 있습니다.')
-      :(readOnly?'보기 전용입니다.':('나는 '+p+'. 느껴지는 것을 모두 고르세요. '+(shared?'자동 저장되고, 다른 사람 답은 확인 전까지 보이지 않습니다.':'다른 사람 이름을 누르면 그 사람 차례로 넘어갑니다.')));
+    if(mine){
+      howto.textContent=p+'의 답안과 현재까지 결과입니다. 다른 사람이 제출하면 순위표가 자동으로 갱신됩니다.';
+    }else{
+      howto.textContent=readOnly?'보기 전용입니다.':('나는 '+p+'. 느껴지는 것을 모두 고른 뒤 제출하세요. '+(shared?'다른 사람 답은 내가 제출하기 전까지 보이지 않습니다.':'다른 사람 이름을 누르면 그 사람 차례로 넘어갑니다.'));
+    }
     chipsEl.innerHTML='';
     POOL.forEach(function(g){
       var cat=document.createElement('div');cat.className='cat';
@@ -437,58 +445,84 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
       g.items.forEach(function(it){
         var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=it[1];
         var on=sel.indexOf(it[0])>-1,inNote=!!noteOf(it,side);
-        if(done){
+        if(mine){
           b.disabled=true;
           if(on&&inNote){b.classList.add('hit');b.title=noteOf(it,side)}
           else if(on){b.classList.add('miss')}
           else if(inNote){b.classList.add('missed');b.title=noteOf(it,side)}
         }else{
           b.setAttribute('aria-pressed',on?'true':'false');
-          b.disabled=readOnly;
-          b.onclick=function(){var i=sel.indexOf(it[0]);if(i>-1)sel.splice(i,1);else sel.push(it[0]);queuePick(side,p);render()};
+          b.disabled=readOnly||!!saving[k];
+          b.onclick=function(){var i=sel.indexOf(it[0]);if(i>-1)sel.splice(i,1);else sel.push(it[0]);errMsg='';queuePick(side,p);render()};
         }
         row.appendChild(b);
       });
       cat.append(lab,row);chipsEl.appendChild(cat);
     });
-    var anyone=PLAYERS.some(function(n){return state.sel[side][n].length>0});
-    checkBtn.hidden=done;checkBtn.disabled=!anyone||readOnly;
-    if(!done){var left=PLAYERS.filter(function(n){return !state.sel[side][n].length});
-      checkBtn.textContent=left.length?('확인하고 점수 보기 · 미제출 '+left.join(', ')):'확인하고 점수 보기'}
-    retryBtn.hidden=!done||readOnly;retryBtn.textContent=retryArmed?'한 번 더 누르면 이 잔 기록을 지웁니다':'이 잔 다시 하기';
-    if(done)showResult(side);else resEl.hidden=true;
+    checkBtn.hidden=mine;
+    if(!mine){
+      checkBtn.disabled=readOnly||!sel.length||!!saving[k];
+      checkBtn.textContent=saving[k]?'제출 중…':(sel.length?p+' 제출하고 점수 보기':'향을 하나 이상 고르세요');
+    }
+    retryBtn.hidden=!mine||readOnly;
+    retryBtn.textContent=retryArmed?'한 번 더 누르면 이 잔의 5명 기록을 모두 지웁니다':'내 답 다시 고르기';
+    if(mine)showResult(side);
+    else if(errMsg){resEl.innerHTML='<div>'+errMsg+'</div>';resEl.hidden=false}
+    else resEl.hidden=true;
   }
   function board(rows,cols){
-    var max=Math.max.apply(null,rows.map(function(r){return r.total}));
+    var done=rows.filter(function(r){return r.locked});
+    var max=done.length?Math.max.apply(null,done.map(function(r){return r.total})):null;
     var h='<table class="board"><thead><tr><th>이름</th>'+cols.map(function(c){return '<th>'+c[0]+'</th>'}).join('')+'<th>점수</th></tr></thead><tbody>';
     rows.forEach(function(r){
-      h+='<tr'+(r.total===max?' class="top"':'')+'><td>'+r.name+(r.total===max?'<span class="crown">1위</span>':'')+'</td>'+cols.map(function(c){return '<td>'+r[c[1]]+'</td>'}).join('')+'<td class="sc">'+r.total+'</td></tr>';
+      if(!r.locked){h+='<tr class="wait"><td>'+r.name+'</td><td colspan="'+(cols.length+1)+'" class="muted">'+r.waitText+'</td></tr>';return}
+      var top=r.total===max;
+      h+='<tr'+(top?' class="top"':'')+'><td>'+r.name+(top?'<span class="crown">1위</span>':'')+'</td>'+cols.map(function(c){return '<td>'+r[c[1]]+'</td>'}).join('')+'<td class="sc">'+r.total+'</td></tr>';
     });
     return h+'</tbody></table>';
   }
+  function waitText(side,n){return state.sel[side][n].length?'고르는 중':'아직 시작 전'}
   function showResult(side){
-    var rows=PLAYERS.map(function(n){var s=score(side,n);return {name:n,hit:s.hit,wrong:s.wrong,total:s.total}}).sort(function(a,b){return b.total-a.total||b.hit-a.hit});
+    var rows=PLAYERS.map(function(n){var s=score(side,n);return {name:n,hit:s.hit,wrong:s.wrong,total:s.total,locked:state.lock[side][n],waitText:waitText(side,n)}})
+      .sort(function(a,b){if(a.locked!==b.locked)return a.locked?-1:1;return b.total-a.total||b.hit-a.hit});
+    var cnt=rows.filter(function(r){return r.locked}).length;
     var name=side==='t'?'Terroirs':'Minéral';
     var notes=ALL.filter(function(it){return noteOf(it,side)}).length;
     var p=state.player,me=score(side,p);
     var hits=ALL.filter(function(it){return state.sel[side][p].indexOf(it[0])>-1&&noteOf(it,side)});
-    var html='<div class="big">'+name+' 결과</div>'+board(rows,[['맞음','hit'],['틀림','wrong']]);
+    var html='<div class="big">'+name+' 결과 · '+cnt+'/'+PLAYERS.length+'명 제출</div>';
+    if(cnt<PLAYERS.length)html+='<div class="muted" style="font-size:13px">나머지가 제출하면 순위가 자동으로 바뀝니다.</div>';
+    html+=board(rows,[['맞음','hit'],['틀림','wrong']]);
     html+='<div class="legend"><span class="l1">노트와 일치</span><span class="l2">노트에 없음</span><span class="l3">노트에 있지만 안 고름</span></div>';
     html+='<div><b>'+p+'</b> · 맞음 '+me.hit+' / 틀림 '+me.wrong+' / 노트 표현 '+notes+'개 중 '+me.hit+'개 찾음</div>';
     if(hits.length)html+='<div class="muted" style="font-size:13px">맞힌 근거 · '+hits.map(function(i){return noteOf(i,side)}).join(' · ')+'</div>';
-    if(state.done.t&&state.done.m){
-      var tot=PLAYERS.map(function(n){var a=score('t',n),b=score('m',n);return {name:n,t:a.total,m:b.total,total:a.total+b.total}}).sort(function(a,b){return b.total-a.total});
+    if(state.lock.t[p]&&state.lock.m[p]){
+      var tot=PLAYERS.map(function(n){var a=score('t',n),b=score('m',n);var both=state.lock.t[n]&&state.lock.m[n];
+        return {name:n,t:a.total,m:b.total,total:a.total+b.total,locked:both,waitText:(state.lock.t[n]||state.lock.m[n])?'한 잔만 제출':'아직 제출 전'}})
+        .sort(function(a,b){if(a.locked!==b.locked)return a.locked?-1:1;return b.total-a.total});
       html+='<div class="big" style="margin-top:8px">두 잔 합계</div>'+board(tot,[['Terroirs','t'],['Minéral','m']]);
     }
     resEl.innerHTML=html;resEl.hidden=false;
   }
-  tabT.onclick=function(){state.cur='t';retryArmed=false;save();render()};
-  tabM.onclick=function(){state.cur='m';retryArmed=false;save();render()};
-  checkBtn.onclick=function(){state.done[state.cur]=true;writeGame();render();resEl.scrollIntoView({block:'nearest'})};
+  tabT.onclick=function(){state.cur='t';retryArmed=false;errMsg='';save();render()};
+  tabM.onclick=function(){state.cur='m';retryArmed=false;errMsg='';save();render()};
+  checkBtn.onclick=function(){
+    var side=state.cur,p=state.player,k=side+'|'+p;
+    state.lock[side][p]=true;errMsg='';
+    if(!shared){save();render();resEl.scrollIntoView({block:'nearest',behavior:'smooth'});return}
+    saving[k]=true;state.lock[side][p]=false;render();
+    state.lock[side][p]=true;
+    queuePick(side,p,true).then(function(){
+      saving[k]=false;render();resEl.scrollIntoView({block:'nearest',behavior:'smooth'});
+    },function(){
+      saving[k]=false;state.lock[side][p]=false;
+      errMsg='제출을 저장하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.';render();
+    });
+  };
+  /* 결과 화면에서: 한 번 누르면 내 답만 수정 모드, 길게 확인하면 전체 초기화는 아래 버튼 */
   retryBtn.onclick=function(){
-    if(!retryArmed){retryArmed=true;render();setTimeout(function(){retryArmed=false;render()},3000);return}
-    retryArmed=false;var side=state.cur;state.done[side]=false;state.sel[side]=blank();
-    resetShared(side);render();
+    var side=state.cur,p=state.player;
+    state.lock[side][p]=false;queuePick(side,p,true).catch(function(){});render();
   };
   render();
 
@@ -496,36 +530,40 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
   memo.addEventListener('input',function(){state.memo=memo.value;save()});
   var rb=document.getElementById('reset'),armed=false;
   rb.onclick=function(){
-    if(!armed){armed=true;rb.textContent='한 번 더 누르면 두 잔 기록을 모두 지웁니다';setTimeout(function(){armed=false;rb.textContent='전체 기록 지우기'},3000);return}
+    if(!armed){armed=true;rb.textContent='한 번 더 누르면 5명의 두 잔 기록을 모두 지웁니다';setTimeout(function(){armed=false;rb.textContent='전체 기록 지우기'},3000);return}
     armed=false;rb.textContent='전체 기록 지우기';
-    state.sel={t:blank(),m:blank()};state.done={t:false,m:false};state.cur='t';memo.value='';state.memo='';
+    state.sel={t:blank(),m:blank()};state.lock={t:blankB(),m:blankB()};state.cur='t';memo.value='';state.memo='';
     resetShared('all');save();render();
   };
 
   /* connect: poll the sheet */
-  function applyRemote(j){
+  function applyRemote(j,t0){
+    if(t0<resetAt)return;
     var seen={};
+    function stale(k){return pending(k)||saving[k]||(wrote[k]&&t0<wrote[k])}
     (j.picks||[]).forEach(function(v){
       if(!v||!state.sel[v.side]||PLAYERS.indexOf(v.player)<0)return;
       var k=v.side+'|'+v.player;seen[k]=true;
-      if(dirty[k]||busy[k])return;
-      state.sel[v.side][v.player]=Array.isArray(v.sel)?v.sel.filter(function(x){return typeof x==='string'}):[];
+      if(stale(k))return;
+      var arr=Array.isArray(v.sel)?v.sel.filter(function(x){return typeof x==='string'}):[];
+      state.lock[v.side][v.player]=arr.indexOf(LOCK)>-1;
+      state.sel[v.side][v.player]=arr.filter(function(x){return x!==LOCK});
     });
     ['t','m'].forEach(function(side){PLAYERS.forEach(function(p){
-      var k=side+'|'+p;if(!seen[k]&&!dirty[k]&&!busy[k])state.sel[side][p]=[];
+      var k=side+'|'+p;if(!seen[k]&&!stale(k)){state.sel[side][p]=[];state.lock[side][p]=false}
     })});
-    if(Date.now()-doneLock>4000){var dn=j.done||{};state.done={t:!!dn.t,m:!!dn.m}}
     render();
   }
   function poll(){
+    var t0=Date.now();
     fetch(SHEET_URL+(SHEET_URL.indexOf('?')>-1?'&':'?')+'action=all&_='+Date.now())
       .then(function(r){return r.json()})
-      .then(function(j){applyRemote(j);setStatus('공유 중 · 각자 폰으로 같은 링크를 열면 3초마다 맞춰집니다.')})
+      .then(function(j){applyRemote(j,t0);setStatus('공유 중 · 각자 폰으로 같은 링크를 열면 3초마다 맞춰집니다.')})
       .catch(function(){setStatus('시트에 연결하지 못했습니다. 잠시 후 자동으로 다시 시도합니다.')})
       .then(function(){pollTimer=setTimeout(poll,document.hidden?10000:3000)});
   }
   if(SHEET_URL){
-    shared=true;state.sel={t:blank(),m:blank()};state.done={t:false,m:false};save();render();
+    shared=true;state.sel={t:blank(),m:blank()};state.lock={t:blankB(),m:blankB()};save();render();
     setStatus('시트에 연결 중…');poll();
     document.addEventListener('visibilitychange',function(){if(!document.hidden){clearTimeout(pollTimer);poll()}});
   }else{
@@ -544,20 +582,20 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
     {q:'2025년, 블랑 드 블랑의 집에서 처음 나온 와인은?',o:['100% 뫼니에 샴페인','스틸 레드와 로제','디저트 와인','라타피아'],a:1,e:'아들 Ambroise가 Avenay-Val-d\'Or의 피노 누아로 Coteaux Champenois 레드와 로제를 냈습니다.'},
     {q:'오늘 두 병 중 도자주가 더 낮은 쪽은?',o:['Terroirs','Minéral','둘이 같다','둘 다 0'],a:1,e:'자료 기준 Terroirs 약 5 g/L, Minéral 약 3 g/L입니다.'}
   ];
-  var box=document.getElementById('quizbox'),idx=0,score=0;
+  var box=document.getElementById('quizbox'),idx=0,qscore=0;
   function render2(){
     box.innerHTML='';
     if(idx>=Q.length){
-      var s=document.createElement('div');s.className='score';s.textContent=score+' / '+Q.length;
+      var s=document.createElement('div');s.className='score';s.textContent=qscore+' / '+Q.length;
       var p=document.createElement('p');p.className='explain';
-      p.textContent=score===Q.length?'만점. 다음엔 Vénus를 따야겠습니다.':score>=6?'이 정도면 테이블에서 이야기꾼입니다.':'에피소드를 한 번 더 훑고 다시 도전해 보세요.';
+      p.textContent=qscore===Q.length?'만점. 다음엔 Vénus를 따야겠습니다.':qscore>=6?'이 정도면 테이블에서 이야기꾼입니다.':'에피소드를 한 번 더 훑고 다시 도전해 보세요.';
       var b=document.createElement('button');b.className='btn';b.type='button';b.textContent='다시 풀기';
-      b.onclick=function(){idx=0;score=0;render2()};
+      b.onclick=function(){idx=0;qscore=0;render2()};
       box.append(s,p,b);return;
     }
     var it=Q[idx];
     var h=document.createElement('div');h.className='qhead';
-    h.innerHTML='<span>Q'+(idx+1)+' / '+Q.length+'</span><span>정답 '+score+'</span>';
+    h.innerHTML='<span>Q'+(idx+1)+' / '+Q.length+'</span><span>정답 '+qscore+'</span>';
     var bar=document.createElement('div');bar.className='bar';bar.innerHTML='<i style="width:'+(idx/Q.length*100)+'%"></i>';
     var q=document.createElement('div');q.className='qtext';q.textContent=it.q;
     var opts=document.createElement('div');opts.className='opts';
@@ -569,9 +607,9 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
       var b=document.createElement('button');b.type='button';b.textContent=o;
       b.onclick=function(){
         opts.querySelectorAll('button').forEach(function(x,j){x.disabled=true;if(j===it.a)x.classList.add('right')});
-        if(i===it.a)score++;else b.classList.add('wrong');
+        if(i===it.a)qscore++;else b.classList.add('wrong');
         ex.textContent=(i===it.a?'정답. ':'오답. ')+it.e;ex.hidden=false;next.hidden=false;next.focus();
-        h.innerHTML='<span>Q'+(idx+1)+' / '+Q.length+'</span><span>정답 '+score+'</span>';
+        h.innerHTML='<span>Q'+(idx+1)+' / '+Q.length+'</span><span>정답 '+qscore+'</span>';
       };
       opts.appendChild(b);
     });
