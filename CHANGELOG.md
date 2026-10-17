@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v1.9 — 2026-10-18
+- 버그 수정: 다크 모드에서 지도 라벨이 어두운 바탕에 어두운 글자로 나와 빈 네모처럼 보이던 문제. 지도는 항상 밝은 바탕이므로 지도 라벨·마커는 테마와 무관한 고정 색 사용
+
 ## v1.8 — 2026-10-18
 - 지도에 "샹파뉴 전체" 보기 추가: Montagne de Reims, Vallée de la Marne, Côte de Sézanne, Côte des Bar 대표 마을과 Côte des Blancs 범위 표시, Reims·Troyes 기준점, Ambonnay(Egly-Ouriet)
 - 거리 안내(좌표 기준 직선거리): Reims 약 32km, 파리 약 122km, Les Riceys 약 112km, Ambonnay 약 17km
