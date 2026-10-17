@@ -13,6 +13,10 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
 .photo.wide img{aspect-ratio:3/1}
 .photo.tall img{aspect-ratio:4/3}
 .photo.sepia img{filter:sepia(.15)}
+
+.bottle{margin:0 -18px 4px;background:linear-gradient(var(--chalk),var(--paper));display:flex;justify-content:center;border-bottom:1px solid var(--line)}
+.bottle img{display:block;height:300px;width:auto;max-width:100%;object-fit:contain}
+.lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;white-space:nowrap}
 </style>
 <title>Agrapart 시음 노트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,6 +92,7 @@ nav a:hover,nav a:focus-visible{border-color:var(--gold);outline:none}
 .duel{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:620px){.duel{grid-template-columns:1fr}}
 .cuvee{background:var(--paper);border:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.cuvee{padding-top:0;overflow:hidden}
 .cuvee.t{border-top:4px solid var(--gold)}
 .cuvee.m{border-top:4px solid var(--flint)}
 .cuvee h3{font-size:24px}
@@ -249,26 +254,34 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
   <div class="eyebrow">오늘의 두 병</div>
   <h2>맛 정보는 퀴즈를 푼 뒤에</h2>
   <figure class="photo tall"><img src="img/cote-des-blancs.webp" alt="Avize 언덕에서 내려다본 Côte des Blancs 포도밭" width="1200" height="900" loading="lazy" decoding="async"><figcaption>Avize 언덕에서 내려다본 Côte des Blancs. 오늘의 두 병이 모두 이 비탈의 백악토에서 왔습니다.</figcaption></figure>
-  <span class="blind">BLIND · 향과 맛은 여기 적지 않았습니다</span>
+  <span class="blind">BLIND · 향과 맛은 여기 적지 않았습니다 · 아래 정보는 오늘 병의 뒷라벨 기준</span>
   <div class="duel">
     <article class="cuvee t">
+      <figure class="bottle"><img src="img/bottle-terroirs.webp" alt="오늘 마시는 Agrapart Terroirs 병" width="480" height="1487" loading="lazy" decoding="async"></figure>
       <div class="eyebrow">NV · Extra Brut · Grand Cru</div>
       <h3>Terroirs</h3>
       <dl>
-        <dt>밭</dt><dd>4개 그랑크뤼 노목 블렌드</dd>
-        <dt>빈티지</dt><dd>두 해를 섞음, 리저브 비중 높음</dd>
-        <dt>양조</dt><dd>일부 중성 대형 오크</dd>
-        <dt>도자주</dt><dd>약 5 g/L</dd>
+        <dt>밭</dt><dd>Avize·Oger·Cramant·Oiry 그랑크뤼</dd>
+        <dt>빈티지</dt><dd>여러 해를 섞은 블렌드</dd>
+        <dt>양조</dt><dd>오크통 약 25% <span class="lbl">라벨, 일부 가려짐</span></dd>
+        <dt>도자주</dt><dd>5 g/L <span class="lbl">라벨</span></dd>
+        <dt>병입</dt><dd>2021년 5월</dd>
+        <dt>디스고징</dt><dd>2024년 10월</dd>
+        <dt>병 속 숙성</dt><dd>약 41개월 <span class="lbl">라벨 날짜로 계산</span></dd>
       </dl>
     </article>
     <article class="cuvee m">
-      <div class="eyebrow">Vintage · Extra Brut · Grand Cru</div>
+      <figure class="bottle"><img src="img/bottle-mineral.webp" alt="오늘 마시는 Agrapart Minéral 2016 병" width="480" height="1487" loading="lazy" decoding="async"></figure>
+      <div class="eyebrow">2016 · Extra Brut · Grand Cru</div>
       <h3>Minéral</h3>
       <dl>
-        <dt>밭</dt><dd>두 구획만: Champboutons(Avize), Bionnes(Cramant)</dd>
-        <dt>빈티지</dt><dd>단일 빈티지</dd>
-        <dt>양조</dt><dd>Avize는 스테인리스, Cramant는 오래된 600L 오크</dd>
-        <dt>도자주</dt><dd>약 3 g/L</dd>
+        <dt>밭</dt><dd>Bionnes(Cramant) · Champ Bouton(Avize) 노목, 석회질 토양</dd>
+        <dt>빈티지</dt><dd>2016 단일 빈티지</dd>
+        <dt>양조</dt><dd>절반을 오크통에서, 여과 없이 <span class="lbl">라벨</span></dd>
+        <dt>도자주</dt><dd>5 g/L <span class="lbl">라벨, 글자 흐림</span></dd>
+        <dt>병입</dt><dd>2017년 5월</dd>
+        <dt>디스고징</dt><dd>2022년 9월</dd>
+        <dt>병 속 숙성</dt><dd>약 64개월 <span class="lbl">라벨 날짜로 계산</span></dd>
       </dl>
     </article>
   </div>
@@ -339,7 +352,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98kL4ugSZ6cUC6ay936lSzSQ0IWGN65JXPwUcuOtls7EAQ/exec';
 /* ===================================================================================== */
 (function(){
-  var APP_VERSION='v1.3';
+  var APP_VERSION='v1.4';
   var LKEY='agrapart-aroma-5p-v1';
   var PLAYERS=['영광','상민','정인','유진','호빈'];
   var PKEY={'영광':'yk','상민':'sm','정인':'ji','유진':'yj','호빈':'hb'};
@@ -603,7 +616,7 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
     {q:'10여 ha의 밭은 대략 몇 조각으로 나뉘어 있을까?',o:['약 5개','약 15개','약 60개','약 300개'],a:2,e:'자료에 따라 60~62개 구획. 그랑크뤼 마을 곳곳에 흩어져 있습니다.'},
     {q:'Minéral을 이루는 두 구획의 조합은?',o:['Champboutons(Avize) + Bionnes(Cramant)','La Fosse aux Pourceaux + Oger','Avize + Oiry','Vénus 구획 + Complantée 구획'],a:0,e:'Avize의 Champboutons와 Cramant의 Bionnes입니다.'},
     {q:'2025년, 블랑 드 블랑의 집에서 처음 나온 와인은?',o:['100% 뫼니에 샴페인','스틸 레드와 로제','디저트 와인','라타피아'],a:1,e:'아들 Ambroise가 Avenay-Val-d\'Or의 피노 누아로 Coteaux Champenois 레드와 로제를 냈습니다.'},
-    {q:'오늘 두 병 중 도자주가 더 낮은 쪽은?',o:['Terroirs','Minéral','둘이 같다','둘 다 0'],a:1,e:'자료 기준 Terroirs 약 5 g/L, Minéral 약 3 g/L입니다.'}
+    {q:'오늘 두 병 중 디스고징(효모 찌꺼기를 빼낸 날)이 더 최근인 병은?',o:['Terroirs','Minéral','같은 날','라벨에 없다'],a:0,e:'뒷라벨 기준 Terroirs는 2024년 10월, Minéral 2016은 2022년 9월에 디스고징했습니다.'}
   ];
   var box=document.getElementById('quizbox'),idx=0,qscore=0;
   function render2(){
