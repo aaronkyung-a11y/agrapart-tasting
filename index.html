@@ -6,6 +6,13 @@
 <style>
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
+
+.photo{margin:0;display:flex;flex-direction:column;gap:6px}
+.photo img{display:block;width:100%;height:auto;max-width:100%;border-radius:4px;background:var(--line);object-fit:cover}
+.photo figcaption{font-size:12px;color:var(--muted);line-height:1.5}
+.photo.wide img{aspect-ratio:3/1}
+.photo.tall img{aspect-ratio:4/3}
+.photo.sepia img{filter:sepia(.15)}
 </style>
 <title>Agrapart 시음 노트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -202,6 +209,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
   <div class="badges">
     <span class="badge">RM · 직접 재배·양조</span><span class="badge">야생효모</span><span class="badge">노목</span><span class="badge">저도자주</span><span class="badge">말 경작 구획</span>
   </div>
+  <figure class="photo wide"><img src="img/avize-panorama.webp" alt="포도밭 너머로 보이는 Avize 마을 전경" width="1280" height="428" loading="eager" fetchpriority="high" decoding="async"><figcaption>Avize. 아그라파가 자리한 Côte des Blancs의 그랑크뤼 마을</figcaption></figure>
 </header>
 
 <nav aria-label="섹션">
@@ -212,6 +220,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
   <div class="eyebrow">어떤 생산자인가</div>
   <div class="stories">
     <div class="story lead"><span class="kicker">Côte des Blancs의 기준점</span><h3>그로어 샴페인 하면 먼저 거론되는 이름</h3><p>평론가들이 Avize와 Côte des Blancs를 대표하는 재배자로 꼽는 집. 주력 큐베 대부분이 그랑크뤼 블랑 드 블랑입니다.</p></div>
+    <figure class="photo tall"><img src="img/avize-village.webp" alt="가을빛 포도밭 뒤로 보이는 Avize 마을" width="1200" height="900" loading="lazy" decoding="async"><figcaption>가을의 Avize. 마을 바로 앞까지 샤르도네 밭이 이어집니다.</figcaption></figure>
     <div class="pair">
       <div class="story"><span class="kicker">조각 밭</span><h3>10여 ha를 약 60조각으로</h3><p>Avize·Oger·Cramant·Oiry 그랑크뤼에 흩어진 작은 구획을 따로따로 다룹니다.</p></div>
       <div class="story"><span class="kicker">조용한 유기농</span><h3>유기농인데 굳이 말하지 않는다</h3><p>오래 유기농으로 재배했지만 홍보 문구로 쓰지 않았습니다. 그냥 맞는 방식이라서라고.</p></div>
@@ -227,8 +236,10 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
   <div class="eyebrow">에피소드</div>
   <div class="stories">
     <div class="story lead"><span class="kicker">Vénus</span><h3>와인 이름이 말 이름이다</h3><p>Avize의 0.6ha 구획은 기계 없이 사람과 말이 일굽니다. 그 밭을 가는 말의 이름이 Vénus. 큐베 이름도 Vénus입니다. 1959년에 심은 샤르도네, 도자주 없는 Brut Nature.</p></div>
+    <figure class="photo sepia"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Labour_des_vignes_%C3%A0_cheval_%C3%A0_Courc%C3%B4me.jpg/960px-Labour_des_vignes_%C3%A0_cheval_%C3%A0_Courc%C3%B4me.jpg" alt="말로 포도밭을 가는 20세기 초 사진" width="1078" height="520" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('figure').hidden=true"><figcaption>20세기 초, 말로 포도밭 고랑을 가는 모습 (Courcôme). 기계가 들어오기 전엔 다들 이렇게 일했고, Vénus의 밭은 지금도 이 방식입니다.</figcaption></figure>
     <div class="story"><span class="kicker">밭 이름</span><h3>최고급 큐베가 나오는 곳은 '돼지 웅덩이'</h3><p>Vénus의 구획 이름은 La Fosse aux Pourceaux. 직역하면 돼지들의 구덩이쯤 됩니다. 이름과 와인의 격차가 꽤 큽니다.</p></div>
     <div class="story"><span class="kicker">EXP (옛 이름 Expérience)</span><h3>설탕도 효모도 넣지 않고 거품을 만든다</h3><p>보통 샴페인은 병에 설탕과 효모(티라주 리큐어)를 넣어 2차 발효를 일으킵니다. EXP는 대신 자기 밭의 포도즙을 넣습니다. 가당 없음, 도자주 0. 만들기 매우 까다로워 생산량이 극히 적습니다.</p></div>
+    <figure class="photo tall"><img src="img/chalk-cellar.webp" alt="백악을 파낸 지하 셀러에 늘어선 리들링 랙" width="1200" height="900" loading="lazy" decoding="async"><figcaption>샴페인의 거품이 자라는 곳. 백악을 파낸 지하 셀러(크레예르)의 리들링 랙 (Reims의 다른 메종).</figcaption></figure>
     <div class="story"><span class="kicker">Complantée</span><h3>샴페인이 잊은 품종들을 한 밭에</h3><p>Avize의 한 구획에 샤르도네·피노 누아·뫼니에와 함께 Arbane, Petit Meslier, Pinot Blanc 같은 옛 품종을 섞어 심고, 한꺼번에 따서 함께 양조합니다.</p></div>
     <div class="story"><span class="kicker">2025</span><h3>블랑 드 블랑의 집이 레드를 냈다</h3><p>2018년 합류한 아들 Ambroise가 Avenay-Val-d'Or의 피노 누아로 스틸 레드(Coteaux Champenois)와 로제를 만들어 2025년에 처음 내놓았습니다.</p></div>
   </div>
@@ -237,6 +248,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 <section id="bottles">
   <div class="eyebrow">오늘의 두 병</div>
   <h2>맛 정보는 퀴즈를 푼 뒤에</h2>
+  <figure class="photo tall"><img src="img/cote-des-blancs.webp" alt="Avize 언덕에서 내려다본 Côte des Blancs 포도밭" width="1200" height="900" loading="lazy" decoding="async"><figcaption>Avize 언덕에서 내려다본 Côte des Blancs. 오늘의 두 병이 모두 이 비탈의 백악토에서 왔습니다.</figcaption></figure>
   <span class="blind">BLIND · 향과 맛은 여기 적지 않았습니다</span>
   <div class="duel">
     <article class="cuvee t">
@@ -265,6 +277,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 <section id="taste">
   <div class="eyebrow">블라인드 향 퀴즈 · 5인전</div>
   <h2>누가 이 잔을 제일 잘 읽나</h2>
+  <figure class="photo "><img src="img/avize-harvest.webp" alt="Avize에서 샤르도네 포도송이를 수확하는 손" width="1200" height="800" loading="lazy" decoding="async"><figcaption>Avize의 샤르도네 수확 (2012). 이 포도가 잔 속에서 무엇이 되었는지 맞혀 보세요.</figcaption></figure>
   <div class="tasting">
     <div class="tabs" role="tablist">
       <button type="button" role="tab" id="tab-t" class="tab t" aria-selected="true">Terroirs</button>
@@ -308,6 +321,16 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
     <li><a href="https://www.bodeboca.fr/vino/champagne-agrapart-et-fils-terroirs-blanc-blancs" target="_blank" rel="noopener">Bodeboca — Terroirs</a></li>
     <li><a href="https://callmewine.com/en/champagne-terroirs-agrapart-P6707.htm" target="_blank" rel="noopener">Callmewine — Terroirs</a></li>
   </ul>
+  <div class="eyebrow" style="color:var(--muted);margin-top:8px">사진</div>
+  <ul>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Avize_Marne_France_panorama.jpg" target="_blank" rel="noopener">Avize 전경</a> · Gilles.callot · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Avize.JPG" target="_blank" rel="noopener">가을의 Avize</a> · October Ends · <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Labour_des_vignes_%C3%A0_cheval_%C3%A0_Courc%C3%B4me.jpg" target="_blank" rel="noopener">말로 가는 포도밭 (Courcôme)</a> · 작자 미상, 20세기 초 · 퍼블릭 도메인</li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Riddling_racks_full_of_Ruinart_champagne_in_their_crayeres,_Reims,_France_(42902135834).jpg" target="_blank" rel="noopener">크레예르의 리들링 랙</a> · Winniepix · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:FR-51-Avize3.JPG" target="_blank" rel="noopener">Côte des Blancs 전망</a> · Szeder László · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/File:Vendanges_2012_en_Champagne_(Avize,_chardonnay).jpg" target="_blank" rel="noopener">Avize 샤르도네 수확</a> · Perguillaume · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
+  </ul>
+  <p>사진은 모두 Wikimedia Commons에서 가져왔고 크기와 압축만 바꿨습니다. 아그라파 도멘 자체를 찍은 사진은 아닙니다.</p>
 </footer>
 </div>
 
@@ -316,7 +339,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98kL4ugSZ6cUC6ay936lSzSQ0IWGN65JXPwUcuOtls7EAQ/exec';
 /* ===================================================================================== */
 (function(){
-  var APP_VERSION='v1.2';
+  var APP_VERSION='v1.3';
   var LKEY='agrapart-aroma-5p-v1';
   var PLAYERS=['영광','상민','정인','유진','호빈'];
   var PKEY={'영광':'yk','상민':'sm','정인':'ji','유진':'yj','호빈':'hb'};
