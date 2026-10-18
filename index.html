@@ -56,6 +56,15 @@ a.btn{text-decoration:none;display:inline-block}
 .standings{display:flex;flex-direction:column;gap:8px;padding:14px;border:1px solid var(--line);background:var(--chalk)}
 .standings .big{font-family:var(--display);font-size:18px}
 .board td.rds{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+.winners{display:grid;grid-template-columns:auto 1fr auto;gap:0;font-size:13.5px;font-variant-numeric:tabular-nums}
+.winners>div{padding:6px 4px;border-bottom:1px solid var(--line);min-width:0}
+.winners .wr{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap;padding-right:10px}
+.winners .wn{font-weight:600}
+.winners .wn.lead{font-weight:400;color:var(--muted)}
+.winners .ws{text-align:right;color:var(--muted);font-size:12px;white-space:nowrap}
+.winners .wsep{grid-column:1/-1;font-family:var(--display);font-size:14px;padding:10px 4px 4px;border-bottom:1px solid var(--line)}
+.wbadge{font-family:var(--mono);font-size:10px;color:var(--gold);margin-left:6px;letter-spacing:.04em}
 </style>
 <title>Agrapart 시음 노트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -379,7 +388,9 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
     <div class="standings">
       <div class="big">누적 순위</div>
       <div id="standings"></div>
-      <p class="muted" style="font-size:12.5px;margin:0">라운드마다 점수 = 맞힌 개수 − 노트에 없는 것을 고른 개수. 다른 사람이 제출하면 자동으로 갱신됩니다. 각 라운드 정답은 내가 그 라운드를 제출해야 보입니다.</p>
+      <div class="big" style="margin-top:6px">라운드별 승자</div>
+      <div id="winners"></div>
+      <p class="muted" style="font-size:12.5px;margin:0">라운드마다 점수 = 맞힌 개수 − 노트에 없는 것을 고른 개수. "승"은 5명이 모두 제출한 라운드에서 1위(공동 포함)한 횟수입니다. 다른 사람이 제출하면 자동으로 갱신됩니다. 각 라운드 정답은 내가 그 라운드를 제출해야 보입니다.</p>
     </div>
     <p class="note">정답 기준은 평론가·판매처 시음 노트에 실제로 나온 표현입니다. Minéral 노트는 2017·2019 빈티지 평론에서 모았기 때문에 오늘 마시는 2016과 다를 수 있습니다.</p>
     <label for="memo" class="eyebrow">메모</label>
@@ -428,7 +439,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98kL4ugSZ6cUC6ay936lSzSQ0IWGN65JXPwUcuOtls7EAQ/exec';
 /* ===================================================================================== */
 (function(){
-  var APP_VERSION='v2.0';
+  var APP_VERSION='v2.1';
   var LKEY='agrapart-aroma-rounds-v1';
   var PLAYERS=['영광','상민','정인','유진','호빈'];
   var SIDES=['t','m'],WINE={t:'Terroirs',m:'Minéral'};
@@ -592,18 +603,41 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
     h+='<div class="legend"><span class="l1">노트와 일치</span><span class="l2">노트에 없음</span><span class="l3">노트에 있지만 안 고름</span></div>';
     h+='<div>맞음 '+s.hit+' / 틀림 '+s.wrong+' · 이 라운드 정답 '+notes.length+'개</div>';
     if(notes.length)h+='<div class="muted" style="font-size:13px">정답 근거 · '+notes.map(function(i){return i[1]+': '+noteOf(i,side)}).join(' · ')+'</div>';
+    var W=roundWinners(side,r);
+    h+='<div><b>'+(W.final?'이 라운드 승자':'현재 선두')+'</b> · '+W.names.join(', ')+' ('+(W.top>0?'+':'')+W.top+'점)'+(W.final?'':' · '+W.done+'/'+PLAYERS.length+'명 제출')+'</div>';
     h+='<div class="muted" style="font-size:13px">이 라운드 다른 사람 · '+others+'</div>';
     resEl.innerHTML=h;resEl.hidden=false;
   }
+  function roundWinners(side,r){
+    var sc=PLAYERS.map(function(n){var x=roundScore(side,n,r);return x?{n:n,t:x.total}:null}).filter(Boolean);
+    if(!sc.length)return {done:0,names:[],top:null,final:false};
+    var top=Math.max.apply(null,sc.map(function(x){return x.t}));
+    return {done:sc.length,names:sc.filter(function(x){return x.t===top}).map(function(x){return x.n}),top:top,final:sc.length===PLAYERS.length};
+  }
+  function winsOf(n){var w=0;SIDES.forEach(function(sd){RID.forEach(function(r){var W=roundWinners(sd,r);if(W.final&&W.names.indexOf(n)>-1)w++})});return w}
+  function renderWinners(){
+    var h='<div class="winners">';
+    SIDES.forEach(function(sd){
+      h+='<div class="wsep">'+WINE[sd]+'</div>';
+      ROUNDS.forEach(function(R,i){
+        var W=roundWinners(sd,R.id);
+        h+='<div class="wr">R'+(i+1)+' '+R.t+'</div>';
+        if(!W.done)h+='<div class="wn lead">아직 제출 없음</div><div class="ws">0/'+PLAYERS.length+'</div>';
+        else h+='<div class="wn'+(W.final?'':' lead')+'">'+(W.final?'🏆 ':'선두 ')+W.names.join(', ')+(W.names.length>1?' (공동)':'')+'</div><div class="ws">'+(W.top>0?'+':'')+W.top+'점 · '+W.done+'/'+PLAYERS.length+'</div>';
+      });
+    });
+    $('winners').innerHTML=h+'</div>';
+  }
   function renderStandings(){
-    var rows=PLAYERS.map(function(n){var T=totals(n);return {name:n,total:T.total,rounds:T.rounds,hit:T.hit}})
+    var rows=PLAYERS.map(function(n){var T=totals(n);return {name:n,total:T.total,rounds:T.rounds,hit:T.hit,wins:winsOf(n)}})
       .sort(function(a,b){return b.total-a.total||b.hit-a.hit||b.rounds-a.rounds});
     var any=rows.some(function(x){return x.rounds>0});
     var max=any?Math.max.apply(null,rows.filter(function(x){return x.rounds}).map(function(x){return x.total})):null;
-    var h='<table class="board"><thead><tr><th>이름</th><th>라운드</th><th>맞음</th><th>점수</th></tr></thead><tbody>';
+    var h='<table class="board"><thead><tr><th>이름</th><th>라운드</th><th>승</th><th>맞음</th><th>점수</th></tr></thead><tbody>';
     rows.forEach(function(x){var top=any&&x.rounds&&x.total===max;
-      h+='<tr'+(top?' class="top"':'')+'><td>'+x.name+(top?'<span class="crown">1위</span>':'')+'</td><td class="rds">'+x.rounds+'/10</td><td>'+x.hit+'</td><td class="sc">'+x.total+'</td></tr>'});
+      h+='<tr'+(top?' class="top"':'')+'><td>'+x.name+(top?'<span class="crown">1위</span>':'')+'</td><td class="rds">'+x.rounds+'/10</td><td>'+x.wins+'</td><td>'+x.hit+'</td><td class="sc">'+x.total+'</td></tr>'});
     $('standings').innerHTML=h+'</tbody></table>';
+    renderWinners();
   }
   tabT.onclick=function(){state.cur='t';errMsg='';save();render()};
   tabM.onclick=function(){state.cur='m';errMsg='';save();render()};
