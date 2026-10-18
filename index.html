@@ -65,6 +65,12 @@ a.btn{text-decoration:none;display:inline-block}
 .winners .ws{text-align:right;color:var(--muted);font-size:12px;white-space:nowrap}
 .winners .wsep{grid-column:1/-1;font-family:var(--display);font-size:14px;padding:10px 4px 4px;border-bottom:1px solid var(--line)}
 .wbadge{font-family:var(--mono);font-size:10px;color:var(--gold);margin-left:6px;letter-spacing:.04em}
+
+.tab.c[aria-selected="true"]{background:var(--gold-soft);color:var(--ink);box-shadow:inset 0 -3px 0 #7A8B3A}
+.duel.one{grid-template-columns:1fr}
+.cuvee.c{border-top:4px solid #7A8B3A;padding-top:18px}
+.cuvee.c .eyebrow{color:#7A8B3A}
+@media (max-width:420px){.tabs .tab{padding:6px 11px;font-size:14px}}
 </style>
 <title>Agrapart 시음 노트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -269,7 +275,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 </header>
 
 <nav aria-label="섹션">
-  <a href="#who">어떤 생산자</a><a href="#map">지도</a><a href="#stories">에피소드</a><a href="#bottles">오늘의 두 병</a><a href="#taste">블라인드 향 퀴즈</a><a href="#quiz">상식 퀴즈</a>
+  <a href="#who">어떤 생산자</a><a href="#map">지도</a><a href="#stories">에피소드</a><a href="#bottles">오늘의 두 병</a><a href="#chenin">Chenin</a><a href="#taste">블라인드 향 퀴즈</a><a href="#quiz">상식 퀴즈</a>
 </nav>
 
 <section id="who">
@@ -364,8 +370,35 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
   </div>
 </section>
 
+<section id="chenin">
+  <div class="eyebrow">보너스 와인 · Loire</div>
+  <h2>Frédéric Mabileau · Chenin du Puy</h2>
+  <span class="blind">BLIND · 향과 맛은 퀴즈를 푼 뒤에</span>
+  <div class="stories">
+    <div class="story lead"><span class="kicker">레드의 집이 만든 흰 와인</span><h3>카베르네 프랑 마을에서 온 슈냉 블랑</h3><p>도멘은 루아르의 Saint-Nicolas-de-Bourgueil에 있고, 카베르네 프랑 레드로 이름난 집입니다. 이 집안이 포도를 길러 온 건 1620년부터라고 합니다. Chenin du Puy는 그 레드의 집이 따로 일군 슈냉 블랑 한 병입니다.</p></div>
+    <div class="pair">
+      <div class="story"><span class="kicker">1 ha의 언덕</span><h3>Puy-Notre-Dame 비탈의 작은 밭</h3><p>2007년에 사들인 1 ha 남짓의 밭에서 나옵니다. 1976년에 심은 노목이고, 흙은 루아르의 하얀 석회암 튀포(tuffeau)에 편암과 붉은 점토가 섞여 있습니다.</p></div>
+      <div class="story"><span class="kicker">느리게, 두 번에 걸쳐</span><h3>두 번 나눠 따고, 오크통에서 거의 2년</h3><p>최대 3주 간격으로 두 번 손으로 수확하고, 야생효모로 온도 조절 없이 오래된 오크통에서 발효합니다. 통에서 20~22개월 숙성한 뒤 여과 없이 병에 담습니다. 유기농·비오디나미 인증 와인입니다.</p></div>
+    </div>
+    <div class="story"><span class="kicker">이어지는 손</span><h3>2020년, 가족이 수확을 이어받다</h3><p>Frédéric Mabileau는 2020년 경비행기 사고로 세상을 떠났습니다. 그해 수확은 아내 Nathalie와 두 아들 Rémy, Charly가 맡아 이어갔습니다.</p></div>
+  </div>
+  <div class="duel one">
+    <article class="cuvee c">
+      <div class="eyebrow">Saumur Blanc AOC · Dry</div>
+      <h3>Chenin du Puy</h3>
+      <dl>
+        <dt>품종</dt><dd>Chenin Blanc 100%</dd>
+        <dt>밭</dt><dd>Puy-Notre-Dame 비탈, 약 1 ha, 1976년 식재</dd>
+        <dt>양조</dt><dd>야생효모, 오래된 오크통 <span class="lbl">500L·600L 자료마다 다름</span></dd>
+        <dt>숙성</dt><dd>통에서 20~22개월, 무여과</dd>
+        <dt>알코올</dt><dd>13~14% <span class="lbl">빈티지별</span></dd>
+      </dl>
+    </article>
+  </div>
+</section>
+
 <section id="taste">
-  <div class="eyebrow">블라인드 향 퀴즈 · 5인전 · 2잔 × 5라운드</div>
+  <div class="eyebrow">블라인드 향 퀴즈 · 5인전 · Agrapart 2잔 + Chenin 1잔</div>
   <h2>누가 이 잔을 제일 잘 읽나</h2>
   <figure class="photo "><img src="img/avize-harvest.webp" alt="Avize에서 샤르도네 포도송이를 수확하는 손" width="1200" height="800" loading="lazy" decoding="async"><figcaption>Avize의 샤르도네 수확 (2012). 이 포도가 잔 속에서 무엇이 되었는지 맞혀 보세요.</figcaption></figure>
   <div class="tasting">
@@ -374,6 +407,7 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
     <div class="tabs" role="tablist" aria-label="와인">
       <button type="button" role="tab" id="tab-t" class="tab t" aria-selected="true">Terroirs</button>
       <button type="button" role="tab" id="tab-m" class="tab m" aria-selected="false">Minéral</button>
+      <button type="button" role="tab" id="tab-c" class="tab c" aria-selected="false">Chenin du Puy</button>
     </div>
     <div class="rounds" id="rounds" role="tablist" aria-label="라운드"></div>
     <div class="rhead"><span class="rnum" id="rnum"></span><h3 id="rtitle"></h3><p class="muted" id="rq"></p></div>
@@ -386,13 +420,15 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
     </div>
     <div class="result" id="result" hidden></div>
     <div class="standings">
-      <div class="big">누적 순위</div>
+      <div class="big">Agrapart 누적 순위 <span class="muted" style="font-size:13px">Terroirs + Minéral · 10라운드</span></div>
       <div id="standings"></div>
+      <div class="big" style="margin-top:6px">Chenin du Puy 순위 <span class="muted" style="font-size:13px">별도 집계 · 5라운드</span></div>
+      <div id="standings-c"></div>
       <div class="big" style="margin-top:6px">라운드별 승자</div>
       <div id="winners"></div>
       <p class="muted" style="font-size:12.5px;margin:0">라운드마다 점수 = 맞힌 개수 − 노트에 없는 것을 고른 개수. "승"은 5명이 모두 제출한 라운드에서 1위(공동 포함)한 횟수입니다. 다른 사람이 제출하면 자동으로 갱신됩니다. 각 라운드 정답은 내가 그 라운드를 제출해야 보입니다.</p>
     </div>
-    <p class="note">정답 기준은 평론가·판매처 시음 노트에 실제로 나온 표현입니다. Minéral 노트는 2017·2019 빈티지 평론에서 모았기 때문에 오늘 마시는 2016과 다를 수 있습니다.</p>
+    <p class="note">정답 기준은 평론가·판매처 시음 노트에 실제로 나온 표현입니다. Minéral 노트는 2017·2019 빈티지 평론에서, Chenin du Puy 노트는 여러 빈티지(2014·2018·2022 등)의 판매처 노트에서 모았기 때문에 오늘 병과 다를 수 있습니다.</p>
     <label for="memo" class="eyebrow">메모</label>
     <textarea id="memo" placeholder="데고르주망 날짜, 온도, 페어링, 첫인상…"></textarea>
     <div class="rowbtns"><button class="btn ghost" id="reset" type="button">전체 기록 지우기</button></div>
@@ -439,15 +475,17 @@ textarea:focus{outline:2px solid var(--gold);outline-offset:0}
 var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98kL4ugSZ6cUC6ay936lSzSQ0IWGN65JXPwUcuOtls7EAQ/exec';
 /* ===================================================================================== */
 (function(){
-  var APP_VERSION='v2.1';
+  var APP_VERSION='v2.2';
   var LKEY='agrapart-aroma-rounds-v1';
   var PLAYERS=['영광','상민','정인','유진','호빈'];
-  var SIDES=['t','m'],WINE={t:'Terroirs',m:'Minéral'};
+  var WINES=['t','m','c'],ROWS=['t','m'],WINE={t:'Terroirs',m:'Minéral',c:'Chenin du Puy'};
+  var GROUP={t:'ag',m:'ag',c:'c'},GW={ag:['t','m'],c:['c']},GN={ag:'Agrapart',c:'Chenin du Puy'};
+  function rowOf(w){return w==='c'?'m':w}
   function lload(){try{return JSON.parse(localStorage.getItem(LKEY))||{}}catch(e){return {}}}
   function lsave(o){try{localStorage.setItem(LKEY,JSON.stringify(o))}catch(e){}}
 
-  /* 라운드별 보기: [id, 표시명, Terroirs 노트, Minéral 노트]. 빈 값 = 그 와인 노트에 없음 */
-  var ROUNDS=[
+  /* Agrapart 보기: [id, 표시명, Terroirs 노트, Minéral 노트] / Chenin 보기: [id, 표시명, 노트]. 빈 값 = 노트에 없음 */
+  var AR=[
     {id:'fr',t:'과실',q:'어떤 과일이 느껴지나요?',items:[
       ['lemon','레몬·감귤','레몬, 감귤 오일 (JS, WA)','마이어 레몬, 레몬 콩피 (WA, VN, JD)'],
       ['lime','라임 제스트','','라임 제스트 (2019 노트)'],
@@ -490,29 +528,80 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
       ['coarse','거친 기포','',''],
       ['tannic','떫은 탄닌','','']]}
   ];
-  var RID=ROUNDS.map(function(r){return r.id});
-  function rById(id){return ROUNDS[RID.indexOf(id)]}
-  function noteOf(it,side){return side==='t'?it[2]:it[3]}
+  var CR=[
+    {id:'fr',t:'과실',q:'어떤 과일이 느껴지나요?',items:[
+      ['apple','사과·꿀사과','잘 익은 골든 애플 (BBR 2018), 꿀 바른 사과 (Divine Loire)'],
+      ['pear','배','배 (Firstleaf)'],
+      ['peach','복숭아·백도','복숭아 (BBR 2018), 백도 (2022 노트)'],
+      ['apricot','살구','살구 (BBR 2018)'],
+      ['citrus','감귤·시트러스 껍질','시트러스 (Divine Loire), 감귤 껍질 (2022 노트)'],
+      ['exotic','열대·이국 과일','이국 과일 (BBR 2018, BBR 블로그 2014)'],
+      ['quince','모과',''],
+      ['berry','딸기·라즈베리',''],
+      ['cherry','체리','']]},
+    {id:'fl',t:'꽃·꿀',q:'꽃이나 꿀 향이 있나요?',items:[
+      ['white','흰 꽃','흰 꽃 (Firstleaf)'],
+      ['honey','꿀','꿀 (Firstleaf, 2022 노트, Divine Loire)'],
+      ['rose','장미',''],
+      ['chamomile','카모마일',''],
+      ['lavender','라벤더','']]},
+    {id:'ag',t:'오크·스파이스',q:'오크통과 스파이스 쪽은?',items:[
+      ['toast','은은한 토스트 오크','은은한 토스트 오크 (BBR 2018), 가벼운 오크 (BBR 블로그 2014)'],
+      ['spice','오크 스파이스','오크 스파이스 (2022 노트)'],
+      ['pepper','후추','후추 (2022 노트)'],
+      ['vanilla','진한 바닐라',''],
+      ['butter','버터·팝콘',''],
+      ['mushroom','버섯·숲바닥','']]},
+    {id:'mi',t:'미네랄',q:'돌·짠맛·환원 쪽으로는?',items:[
+      ['flint','부싯돌','부싯돌 (2022 노트)'],
+      ['salt','짠맛','짠맛 나는 미네랄 (BBR 2018)'],
+      ['stone','돌·미네랄','미네랄 (Divine Loire, 2022 노트)'],
+      ['match','성냥·환원 향','거의 환원적 (2022 노트)'],
+      ['graphite','흑연',''],
+      ['petrol','석유·페트롤','']]},
+    {id:'tx',t:'질감·구조',q:'입안에서 어떤가요?',items:[
+      ['acid','생생한 산도','뛰어난 산도 (BBR 블로그 2014), 날카로운 첫인상 (2022 노트)'],
+      ['rich','풍부함·농축','풍부함, 놀라운 농축 (BBR 2018), 풍성함 (Divine Loire)'],
+      ['spine','단단한 골격','단단한 골격 (BBR 2018)'],
+      ['thin','가볍고 묽음',''],
+      ['tannic','떫은 탄닌',''],
+      ['bubble','탄산·기포','']]}
+  ];
+  function roundsOf(w){return w==='c'?CR:AR}
+  var RID=AR.map(function(r){return r.id});
+  function rById(w,id){var R=roundsOf(w);return R[RID.indexOf(id)]}
+  function noteOf(it,w){return w==='c'?it[2]:(w==='t'?it[2]:it[3])}
 
-  /* state: sel[side][player][round] = [ids], lock[side][player][round] = bool */
   function blankSide(){var o={};PLAYERS.forEach(function(p){o[p]={}});return o}
+  function blankAll(){return {t:blankSide(),m:blankSide(),c:blankSide()}}
   var local=lload();
-  var state={sel:{t:blankSide(),m:blankSide()},lock:{t:blankSide(),m:blankSide()},
-    cur:SIDES.indexOf(local.cur)>-1?local.cur:'t',round:RID.indexOf(local.round)>-1?local.round:'fr',
+  var state={sel:blankAll(),lock:blankAll(),
+    cur:WINES.indexOf(local.cur)>-1?local.cur:'t',round:RID.indexOf(local.round)>-1?local.round:'fr',
     player:PLAYERS.indexOf(local.player)>-1?local.player:PLAYERS[0],memo:local.memo||''};
   var shared=false;
   function save(){lsave({cur:state.cur,round:state.round,player:state.player,memo:state.memo,
     sel:shared?undefined:state.sel,lock:shared?undefined:state.lock})}
-  if(local.sel&&local.sel.t){SIDES.forEach(function(k){PLAYERS.forEach(function(p){state.sel[k][p]=(local.sel[k]||{})[p]||{};state.lock[k][p]=((local.lock||{})[k]||{})[p]||{}})})}
-  function selOf(side,p,r){var o=state.sel[side][p];return o[r]||(o[r]=[])}
-  function locked(side,p,r){return !!state.lock[side][p][r]}
+  if(local.sel&&local.sel.t){WINES.forEach(function(k){PLAYERS.forEach(function(p){state.sel[k][p]=(local.sel[k]||{})[p]||{};state.lock[k][p]=((local.lock||{})[k]||{})[p]||{}})})}
+  function selOf(w,p,r){var o=state.sel[w][p];return o[r]||(o[r]=[])}
+  function locked(w,p,r){return !!state.lock[w][p][r]}
 
-  /* 시트 저장 형식: 와인·플레이어별 한 줄, 답은 "라운드:보기", 제출은 "!라운드" (Apps Script 변경 불필요) */
-  function encode(side,p){var out=[];RID.forEach(function(r){if(locked(side,p,r))out.push('!'+r)});RID.forEach(function(r){selOf(side,p,r).forEach(function(id){out.push(r+':'+id)})});return out.slice(0,40)}
-  function decode(arr){var sel={},lock={};(arr||[]).forEach(function(x){if(typeof x!=='string')return;
+  /* 시트: 와인 줄(t, m)마다 "!라운드"=제출, "라운드:보기"=답. Chenin은 m 줄에 "C라운드[!]:글자들" 한 토큰씩 (Apps Script 변경 불필요) */
+  var L='abcdefghijklmnop';
+  function encode(row,p){
+    var out=[];RID.forEach(function(r){if(locked(row,p,r))out.push('!'+r)});
+    if(row==='m')RID.forEach(function(r){var R=rById('c',r),ids=selOf('c',p,r),codes='';
+      R.items.forEach(function(it,i){if(ids.indexOf(it[0])>-1)codes+=L[i]});
+      if(codes||locked('c',p,r))out.push('C'+r+(locked('c',p,r)?'!':'')+':'+codes)});
+    RID.forEach(function(r){selOf(row,p,r).forEach(function(id){out.push(r+':'+id)})});
+    return out.slice(0,40);
+  }
+  function decode(arr){var sel={},lock={},csel={},clock={};(arr||[]).forEach(function(x){if(typeof x!=='string')return;
     if(x.charAt(0)==='!'){if(RID.indexOf(x.slice(1))>-1)lock[x.slice(1)]=true;return}
-    var i=x.indexOf(':');if(i<1)return;var r=x.slice(0,i);if(RID.indexOf(r)<0)return;(sel[r]=sel[r]||[]).push(x.slice(i+1))});
-    return {sel:sel,lock:lock}}
+    var i=x.indexOf(':');if(i<1)return;var head=x.slice(0,i),tail=x.slice(i+1);
+    if(head.charAt(0)==='C'){var lk=head.slice(-1)==='!',r=head.slice(1,lk?-1:undefined);if(RID.indexOf(r)<0)return;
+      var R=rById('c',r);csel[r]=tail.split('').map(function(ch){var it=R.items[L.indexOf(ch)];return it?it[0]:null}).filter(Boolean);if(lk)clock[r]=true;return}
+    if(RID.indexOf(head)<0)return;(sel[head]=sel[head]||[]).push(tail)});
+    return {sel:sel,lock:lock,csel:csel,clock:clock}}
 
   var pend={},busy={},dirty={},pollTimer=null,saving={},wrote={},resetAt=0;
   function post(body){
@@ -520,17 +609,17 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
       .then(function(r){return r.json()}).then(function(j){if(!j||!j.ok)throw new Error((j&&j.error)||'fail');return j});
   }
   function pending(k){return !!(dirty[k]||busy[k]||saving[k])}
-  function queue(side,p,now){
+  function queue(w,p,now){
     if(!shared){save();return Promise.resolve()}
-    var k=side+'|'+p;dirty[k]=true;clearTimeout(pend[k]);
-    if(now)return flush(side,p);
-    pend[k]=setTimeout(function(){flush(side,p)},400);return Promise.resolve();
+    var row=rowOf(w),k=row+'|'+p;dirty[k]=true;clearTimeout(pend[k]);
+    if(now)return flush(row,p);
+    pend[k]=setTimeout(function(){flush(row,p)},400);return Promise.resolve();
   }
-  function flush(side,p){
-    var k=side+'|'+p;if(busy[k])return busy[k].then(function(){return dirty[k]?flush(side,p):null});
+  function flush(row,p){
+    var k=row+'|'+p;if(busy[k])return busy[k].then(function(){return dirty[k]?flush(row,p):null});
     dirty[k]=false;
-    busy[k]=post({action:'pick',side:side,player:p,sel:encode(side,p)}).then(function(){
-      wrote[k]=Date.now();busy[k]=null;if(dirty[k])return flush(side,p);
+    busy[k]=post({action:'pick',side:row,player:p,sel:encode(row,p)}).then(function(){
+      wrote[k]=Date.now();busy[k]=null;if(dirty[k])return flush(row,p);
     },function(e){busy[k]=null;throw e});
     return busy[k];
   }
@@ -538,89 +627,99 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
     post({action:'reset',side:'all'}).then(function(){resetAt=Date.now()}).catch(function(){setStatus('초기화를 저장하지 못했습니다. 다시 눌러 주세요.')})}
   function setStatus(t){var el=document.getElementById('sync');if(el)el.textContent=t}
 
-  function roundScore(side,p,r){
-    if(!locked(side,p,r))return null;
-    var hit=0,wrong=0;selOf(side,p,r).forEach(function(id){var it=rById(r).items.filter(function(x){return x[0]===id})[0];if(!it)return;if(noteOf(it,side))hit++;else wrong++});
+  function roundScore(w,p,r){
+    if(!locked(w,p,r))return null;
+    var hit=0,wrong=0,R=rById(w,r);selOf(w,p,r).forEach(function(id){var it=R.items.filter(function(x){return x[0]===id})[0];if(!it)return;if(noteOf(it,w))hit++;else wrong++});
     return {hit:hit,wrong:wrong,total:hit-wrong};
   }
-  function totals(p){var t=0,n=0,hit=0;SIDES.forEach(function(sd){RID.forEach(function(r){var s=roundScore(sd,p,r);if(s){t+=s.total;n++;hit+=s.hit}})});return {total:t,rounds:n,hit:hit}}
+  function totals(p,g){var t=0,n=0,hit=0;GW[g].forEach(function(w){RID.forEach(function(r){var s=roundScore(w,p,r);if(s){t+=s.total;n++;hit+=s.hit}})});return {total:t,rounds:n,hit:hit,max:GW[g].length*RID.length}}
 
   var $=function(id){return document.getElementById(id)};
   var chipsEl=$('chips'),resEl=$('result'),plEl=$('players'),howto=$('howto'),rEl=$('rounds');
-  var tabT=$('tab-t'),tabM=$('tab-m'),checkBtn=$('check'),nextBtn=$('next'),retryBtn=$('retry');
+  var tabs={t:$('tab-t'),m:$('tab-m'),c:$('tab-c')},checkBtn=$('check'),nextBtn=$('next'),retryBtn=$('retry');
   var errMsg='';
 
   function render(){
-    var side=state.cur,p=state.player,r=state.round,R=rById(r),sel=selOf(side,p,r),mine=locked(side,p,r),k=side+'|'+p;
-    tabT.setAttribute('aria-selected',side==='t');tabM.setAttribute('aria-selected',side==='m');
+    var w=state.cur,p=state.player,r=state.round,R=rById(w,r),sel=selOf(w,p,r),mine=locked(w,p,r),k=rowOf(w)+'|'+p,g=GROUP[w];
+    WINES.forEach(function(x){tabs[x].setAttribute('aria-selected',x===w)});
     plEl.innerHTML='';
     PLAYERS.forEach(function(name){
       var b=document.createElement('button');b.type='button';b.className='pl';b.setAttribute('aria-pressed',name===p?'true':'false');
-      var T=totals(name);b.innerHTML='<b></b><small></small>';b.querySelector('b').textContent=name;b.querySelector('small').textContent=T.total+'점';
+      var T=totals(name,g);b.innerHTML='<b></b><small></small>';b.querySelector('b').textContent=name;b.querySelector('small').textContent=T.total+'점';
       b.onclick=function(){state.player=name;errMsg='';save();render()};plEl.appendChild(b);
     });
     rEl.innerHTML='';
-    ROUNDS.forEach(function(x,i){
-      var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.className='rd'+(locked(side,p,x.id)?' done':'');
+    roundsOf(w).forEach(function(x,i){
+      var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.className='rd'+(locked(w,p,x.id)?' done':'');
       b.setAttribute('aria-selected',x.id===r?'true':'false');b.innerHTML='<b>R'+(i+1)+'</b><span></span>';b.querySelector('span').textContent=x.t;
       b.onclick=function(){state.round=x.id;errMsg='';save();render()};rEl.appendChild(b);
     });
     var idx=RID.indexOf(r);
-    $('rnum').textContent=WINE[side]+' · ROUND '+(idx+1)+' / '+ROUNDS.length;
+    $('rnum').textContent=WINE[w]+' · ROUND '+(idx+1)+' / '+RID.length+(g==='c'?' · 별도 집계':'');
     $('rtitle').textContent=R.t;$('rq').textContent=R.q;
     howto.textContent=mine?(p+'의 R'+(idx+1)+' 답과 정답입니다.'):('나는 '+p+'. 이 라운드에서 느껴지는 것을 모두 고르고 제출하세요. 하나도 없다고 느끼면 아무것도 고르지 않고 제출해도 됩니다.');
     chipsEl.innerHTML='';
     R.items.forEach(function(it){
       var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=it[1];
-      var on=sel.indexOf(it[0])>-1,inNote=!!noteOf(it,side);
+      var on=sel.indexOf(it[0])>-1,inNote=!!noteOf(it,w);
       if(mine){b.disabled=true;
-        if(on&&inNote){b.classList.add('hit');b.title=noteOf(it,side)}else if(on){b.classList.add('miss')}else if(inNote){b.classList.add('missed');b.title=noteOf(it,side)}
+        if(on&&inNote){b.classList.add('hit');b.title=noteOf(it,w)}else if(on){b.classList.add('miss')}else if(inNote){b.classList.add('missed');b.title=noteOf(it,w)}
       }else{
         b.setAttribute('aria-pressed',on?'true':'false');b.disabled=!!saving[k];
-        b.onclick=function(){var i=sel.indexOf(it[0]);if(i>-1)sel.splice(i,1);else sel.push(it[0]);errMsg='';queue(side,p);render()};
+        b.onclick=function(){var i=sel.indexOf(it[0]);if(i>-1)sel.splice(i,1);else sel.push(it[0]);errMsg='';queue(w,p);render()};
       }
       chipsEl.appendChild(b);
     });
     checkBtn.hidden=mine;
     if(!mine){checkBtn.disabled=!!saving[k];checkBtn.textContent=saving[k]?'제출 중…':(p+' · R'+(idx+1)+' 제출 ('+sel.length+'개)')}
     retryBtn.hidden=!mine;
-    var nxt=nextRound(side,p);nextBtn.hidden=!mine||!nxt;
-    if(nxt)nextBtn.textContent=(nxt.side!==side?WINE[nxt.side]+' ':'')+'R'+(RID.indexOf(nxt.r)+1)+' '+rById(nxt.r).t+'로 →';
-    if(mine)showRound(side,p,r);else if(errMsg){resEl.innerHTML='<div>'+errMsg+'</div>';resEl.hidden=false}else resEl.hidden=true;
+    var nxt=nextRound(w,p);nextBtn.hidden=!mine||!nxt;
+    if(nxt)nextBtn.textContent=(nxt.w!==w?WINE[nxt.w]+' ':'')+'R'+(RID.indexOf(nxt.r)+1)+' '+rById(nxt.w,nxt.r).t+'로 →';
+    if(mine)showRound(w,p,r);else if(errMsg){resEl.innerHTML='<div>'+errMsg+'</div>';resEl.hidden=false}else resEl.hidden=true;
     renderStandings();
   }
-  function nextRound(side,p){
-    var order=[];SIDES.forEach(function(sd){RID.forEach(function(r){order.push({side:sd,r:r})})});
-    var start=SIDES.indexOf(side)*RID.length+RID.indexOf(state.round);
-    for(var i=1;i<=order.length;i++){var o=order[(start+i)%order.length];if(!locked(o.side,p,o.r))return o}
+  function nextRound(w,p){
+    var ws=GW[GROUP[w]],order=[];ws.forEach(function(x){RID.forEach(function(r){order.push({w:x,r:r})})});
+    var start=ws.indexOf(w)*RID.length+RID.indexOf(state.round);
+    for(var i=1;i<=order.length;i++){var o=order[(start+i)%order.length];if(!locked(o.w,p,o.r))return o}
     return null;
   }
-  function showRound(side,p,r){
-    var R=rById(r),s=roundScore(side,p,r),notes=R.items.filter(function(it){return noteOf(it,side)});
-    var hits=notes.filter(function(it){return selOf(side,p,r).indexOf(it[0])>-1});
-    var others=PLAYERS.filter(function(n){return n!==p}).map(function(n){var x=roundScore(side,n,r);return n+' '+(x?x.total+'점':'대기')}).join(' · ');
-    var h='<div class="big">R'+(RID.indexOf(r)+1)+' '+R.t+' · '+(s.total>0?'+':'')+s.total+'점</div>';
-    h+='<div class="legend"><span class="l1">노트와 일치</span><span class="l2">노트에 없음</span><span class="l3">노트에 있지만 안 고름</span></div>';
-    h+='<div>맞음 '+s.hit+' / 틀림 '+s.wrong+' · 이 라운드 정답 '+notes.length+'개</div>';
-    if(notes.length)h+='<div class="muted" style="font-size:13px">정답 근거 · '+notes.map(function(i){return i[1]+': '+noteOf(i,side)}).join(' · ')+'</div>';
-    var W=roundWinners(side,r);
-    h+='<div><b>'+(W.final?'이 라운드 승자':'현재 선두')+'</b> · '+W.names.join(', ')+' ('+(W.top>0?'+':'')+W.top+'점)'+(W.final?'':' · '+W.done+'/'+PLAYERS.length+'명 제출')+'</div>';
-    h+='<div class="muted" style="font-size:13px">이 라운드 다른 사람 · '+others+'</div>';
-    resEl.innerHTML=h;resEl.hidden=false;
-  }
-  function roundWinners(side,r){
-    var sc=PLAYERS.map(function(n){var x=roundScore(side,n,r);return x?{n:n,t:x.total}:null}).filter(Boolean);
+  function roundWinners(w,r){
+    var sc=PLAYERS.map(function(n){var x=roundScore(w,n,r);return x?{n:n,t:x.total}:null}).filter(Boolean);
     if(!sc.length)return {done:0,names:[],top:null,final:false};
     var top=Math.max.apply(null,sc.map(function(x){return x.t}));
     return {done:sc.length,names:sc.filter(function(x){return x.t===top}).map(function(x){return x.n}),top:top,final:sc.length===PLAYERS.length};
   }
-  function winsOf(n){var w=0;SIDES.forEach(function(sd){RID.forEach(function(r){var W=roundWinners(sd,r);if(W.final&&W.names.indexOf(n)>-1)w++})});return w}
-  function renderWinners(){
+  function winsOf(n,g){var c=0;GW[g].forEach(function(w){RID.forEach(function(r){var W=roundWinners(w,r);if(W.final&&W.names.indexOf(n)>-1)c++})});return c}
+  function showRound(w,p,r){
+    var R=rById(w,r),s=roundScore(w,p,r),notes=R.items.filter(function(it){return noteOf(it,w)});
+    var others=PLAYERS.filter(function(n){return n!==p}).map(function(n){var x=roundScore(w,n,r);return n+' '+(x?x.total+'점':'대기')}).join(' · ');
+    var h='<div class="big">R'+(RID.indexOf(r)+1)+' '+R.t+' · '+(s.total>0?'+':'')+s.total+'점</div>';
+    h+='<div class="legend"><span class="l1">노트와 일치</span><span class="l2">노트에 없음</span><span class="l3">노트에 있지만 안 고름</span></div>';
+    h+='<div>맞음 '+s.hit+' / 틀림 '+s.wrong+' · 이 라운드 정답 '+notes.length+'개</div>';
+    if(notes.length)h+='<div class="muted" style="font-size:13px">정답 근거 · '+notes.map(function(i){return i[1]+': '+noteOf(i,w)}).join(' · ')+'</div>';
+    var W=roundWinners(w,r);
+    h+='<div><b>'+(W.final?'이 라운드 승자':'현재 선두')+'</b> · '+W.names.join(', ')+' ('+(W.top>0?'+':'')+W.top+'점)'+(W.final?'':' · '+W.done+'/'+PLAYERS.length+'명 제출')+'</div>';
+    h+='<div class="muted" style="font-size:13px">이 라운드 다른 사람 · '+others+'</div>';
+    resEl.innerHTML=h;resEl.hidden=false;
+  }
+  function table(g){
+    var rows=PLAYERS.map(function(n){var T=totals(n,g);return {name:n,total:T.total,rounds:T.rounds,hit:T.hit,max:T.max,wins:winsOf(n,g)}})
+      .sort(function(a,b){return b.total-a.total||b.hit-a.hit||b.rounds-a.rounds});
+    var any=rows.some(function(x){return x.rounds>0});
+    var max=any?Math.max.apply(null,rows.filter(function(x){return x.rounds}).map(function(x){return x.total})):null;
+    var h='<table class="board"><thead><tr><th>이름</th><th>라운드</th><th>승</th><th>맞음</th><th>점수</th></tr></thead><tbody>';
+    rows.forEach(function(x){var top=any&&x.rounds&&x.total===max;
+      h+='<tr'+(top?' class="top"':'')+'><td>'+x.name+(top?'<span class="crown">1위</span>':'')+'</td><td class="rds">'+x.rounds+'/'+x.max+'</td><td>'+x.wins+'</td><td>'+x.hit+'</td><td class="sc">'+x.total+'</td></tr>'});
+    return h+'</tbody></table>';
+  }
+  function renderStandings(){
+    $('standings').innerHTML=table('ag');$('standings-c').innerHTML=table('c');
     var h='<div class="winners">';
-    SIDES.forEach(function(sd){
-      h+='<div class="wsep">'+WINE[sd]+'</div>';
-      ROUNDS.forEach(function(R,i){
-        var W=roundWinners(sd,R.id);
+    WINES.forEach(function(w){
+      h+='<div class="wsep">'+WINE[w]+(w==='c'?' · 별도':'')+'</div>';
+      roundsOf(w).forEach(function(R,i){
+        var W=roundWinners(w,R.id);
         h+='<div class="wr">R'+(i+1)+' '+R.t+'</div>';
         if(!W.done)h+='<div class="wn lead">아직 제출 없음</div><div class="ws">0/'+PLAYERS.length+'</div>';
         else h+='<div class="wn'+(W.final?'':' lead')+'">'+(W.final?'🏆 ':'선두 ')+W.names.join(', ')+(W.names.length>1?' (공동)':'')+'</div><div class="ws">'+(W.top>0?'+':'')+W.top+'점 · '+W.done+'/'+PLAYERS.length+'</div>';
@@ -628,29 +727,17 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
     });
     $('winners').innerHTML=h+'</div>';
   }
-  function renderStandings(){
-    var rows=PLAYERS.map(function(n){var T=totals(n);return {name:n,total:T.total,rounds:T.rounds,hit:T.hit,wins:winsOf(n)}})
-      .sort(function(a,b){return b.total-a.total||b.hit-a.hit||b.rounds-a.rounds});
-    var any=rows.some(function(x){return x.rounds>0});
-    var max=any?Math.max.apply(null,rows.filter(function(x){return x.rounds}).map(function(x){return x.total})):null;
-    var h='<table class="board"><thead><tr><th>이름</th><th>라운드</th><th>승</th><th>맞음</th><th>점수</th></tr></thead><tbody>';
-    rows.forEach(function(x){var top=any&&x.rounds&&x.total===max;
-      h+='<tr'+(top?' class="top"':'')+'><td>'+x.name+(top?'<span class="crown">1위</span>':'')+'</td><td class="rds">'+x.rounds+'/10</td><td>'+x.wins+'</td><td>'+x.hit+'</td><td class="sc">'+x.total+'</td></tr>'});
-    $('standings').innerHTML=h+'</tbody></table>';
-    renderWinners();
-  }
-  tabT.onclick=function(){state.cur='t';errMsg='';save();render()};
-  tabM.onclick=function(){state.cur='m';errMsg='';save();render()};
+  WINES.forEach(function(x){tabs[x].onclick=function(){state.cur=x;errMsg='';save();render()}});
   checkBtn.onclick=function(){
-    var side=state.cur,p=state.player,r=state.round,k=side+'|'+p;
-    state.lock[side][p][r]=true;errMsg='';
+    var w=state.cur,p=state.player,r=state.round,k=rowOf(w)+'|'+p;
+    state.lock[w][p][r]=true;errMsg='';
     if(!shared){save();render();return}
     saving[k]=true;render();
-    queue(side,p,true).then(function(){saving[k]=false;render();resEl.scrollIntoView({block:'nearest',behavior:'smooth'})},
-      function(){saving[k]=false;state.lock[side][p][r]=false;errMsg='제출을 저장하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.';render()});
+    queue(w,p,true).then(function(){saving[k]=false;render();resEl.scrollIntoView({block:'nearest',behavior:'smooth'})},
+      function(){saving[k]=false;state.lock[w][p][r]=false;errMsg='제출을 저장하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.';render()});
   };
-  nextBtn.onclick=function(){var o=nextRound(state.cur,state.player);if(!o)return;state.cur=o.side;state.round=o.r;save();render();$('rounds').scrollIntoView({block:'nearest',behavior:'smooth'})};
-  retryBtn.onclick=function(){var side=state.cur,p=state.player;state.lock[side][p][state.round]=false;queue(side,p,true).catch(function(){});render()};
+  nextBtn.onclick=function(){var o=nextRound(state.cur,state.player);if(!o)return;state.cur=o.w;state.round=o.r;save();render();$('rounds').scrollIntoView({block:'nearest',behavior:'smooth'})};
+  retryBtn.onclick=function(){var w=state.cur,p=state.player;state.lock[w][p][state.round]=false;queue(w,p,true).catch(function(){});render()};
   render();
 
   var memo=$('memo');memo.value=state.memo;
@@ -659,7 +746,7 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
   rb.onclick=function(){
     if(!armed){armed=true;rb.textContent='한 번 더 누르면 5명의 모든 라운드 기록을 지웁니다';setTimeout(function(){armed=false;rb.textContent='전체 기록 지우기'},3000);return}
     armed=false;rb.textContent='전체 기록 지우기';
-    state.sel={t:blankSide(),m:blankSide()};state.lock={t:blankSide(),m:blankSide()};state.cur='t';state.round='fr';memo.value='';state.memo='';
+    state.sel=blankAll();state.lock=blankAll();state.cur='t';state.round='fr';memo.value='';state.memo='';
     resetShared();save();render();
   };
 
@@ -669,11 +756,12 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
     function stale(k){return pending(k)||(wrote[k]&&t0<wrote[k])}
     var seen={};
     (j.picks||[]).forEach(function(v){
-      if(!v||SIDES.indexOf(v.side)<0||PLAYERS.indexOf(v.player)<0)return;
+      if(!v||ROWS.indexOf(v.side)<0||PLAYERS.indexOf(v.player)<0)return;
       var k=v.side+'|'+v.player;seen[k]=true;if(stale(k))return;
       var d=decode(v.sel);state.sel[v.side][v.player]=d.sel;state.lock[v.side][v.player]=d.lock;
+      if(v.side==='m'){state.sel.c[v.player]=d.csel;state.lock.c[v.player]=d.clock}
     });
-    SIDES.forEach(function(sd){PLAYERS.forEach(function(p){var k=sd+'|'+p;if(!seen[k]&&!stale(k)){state.sel[sd][p]={};state.lock[sd][p]={}}})});
+    ROWS.forEach(function(row){PLAYERS.forEach(function(p){var k=row+'|'+p;if(!seen[k]&&!stale(k)){state.sel[row][p]={};state.lock[row][p]={};if(row==='m'){state.sel.c[p]={};state.lock.c[p]={}}}})});
     render();
   }
   function poll(){
@@ -685,7 +773,7 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbyGumeabSfnUiaO3ExYz51_98
       .then(function(){pollTimer=setTimeout(poll,document.hidden?10000:3000)});
   }
   if(SHEET_URL){
-    shared=true;state.sel={t:blankSide(),m:blankSide()};state.lock={t:blankSide(),m:blankSide()};save();render();
+    shared=true;state.sel=blankAll();state.lock=blankAll();save();render();
     setStatus('시트에 연결 중…');poll();
     document.addEventListener('visibilitychange',function(){if(!document.hidden){clearTimeout(pollTimer);poll()}});
   }else{
