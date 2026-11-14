@@ -226,13 +226,13 @@ h2 {
 
 /* ∞ */
 .inf path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.inf-draw { stroke: var(--gold); stroke-width: 1.4; stroke-dasharray: var(--len, 525); stroke-dashoffset: 0; }
+.inf-draw { stroke: var(--gold); stroke-width: 1.4; stroke-dasharray: var(--len, 525px); stroke-dashoffset: 0; }
 .slide.active .inf-draw { animation: draw 2.6s cubic-bezier(.5, .1, .2, 1) .25s backwards; }
 .inf-run { stroke: var(--gold-soft); stroke-width: 2.4; opacity: 0;
-  stroke-dasharray: calc(var(--len, 525) * .07) calc(var(--len, 525) * .93); }
+  stroke-dasharray: calc(var(--len, 525px) * .07) calc(var(--len, 525px) * .93); }
 .slide.active .inf-run { animation: run 5.5s linear 2.4s infinite, fadein 1s ease 2.4s forwards; }
-@keyframes draw { from { stroke-dashoffset: var(--len, 525); } }
-@keyframes run { from { stroke-dashoffset: 0; } to { stroke-dashoffset: calc(var(--len, 525) * -1); } }
+@keyframes draw { from { stroke-dashoffset: var(--len, 525px); } }
+@keyframes run { from { stroke-dashoffset: 0; } to { stroke-dashoffset: calc(var(--len, 525px) * -1); } }
 @keyframes fadein { to { opacity: 1; } }
 
 /* ── 2. 14번 ───────────────────────────── */
@@ -877,7 +877,7 @@ h2 {
       p.setAttribute('d', d);
       let len = 525;
       try { len = p.getTotalLength() || 525; } catch (e) {}
-      p.style.setProperty('--len', len.toFixed(1));
+      p.style.setProperty('--len', len.toFixed(1) + 'px');   /* 단위를 붙인다: 크롬은 단위 없는 계산식으로는 선을 움직이지 못한다 */
     });
   })();
 
