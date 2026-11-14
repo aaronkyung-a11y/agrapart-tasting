@@ -340,12 +340,28 @@ h2 {
 .score .big { font-size: min(5.6em, 19vw); line-height: 1; color: var(--gold); white-space: nowrap; }
 .score .big small { font-family: var(--font-body); font-weight: 300; font-size: .3em; color: var(--chalk-dim); margin-left: .2em; }
 .score .lab { font-size: max(.72em, 11px); color: var(--chalk-dim); }
-.win { position: relative; padding: 2.9em 0 3.2em; max-width: 44em; margin-inline: .6em; }
+.win { position: relative; padding: 3.5em 0 3.3em; max-width: 44em; margin-inline: .6em; }
 .win .tl-lab b { font-family: var(--font-serif); font-weight: 600; font-size: 1.4em; }   /* Bodoni의 4는 가로획이 너무 가늘어 2040이 2010처럼 보인다 */
-.win .tl-fill.now { left: 0; width: 26.3%; background: linear-gradient(90deg, var(--chalk-dim), var(--gold-soft)); }
-.at-1 .win .tl-fill.now { transform: scaleX(1); }
-.win .tl-dot.today { left: 26.3%; }
+/* 2021 출시 → 2026 성숙기 시작(26.3%) → 오늘(30.9%) → 2040+ */
+.win .tl-fill.wait { left: 0; width: 30.9%; background: var(--chalk-dim); }   /* 오늘 점까지 잇는다. 금색 띠가 2026부터 그 위를 덮는다 */
+.win .tl-fill.prime {
+  left: 26.3%; width: 73.7%; top: -4px; height: 9px; border-radius: 0 5px 5px 0;
+  background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+  box-shadow: 0 0 1.4em var(--gold-veil);
+}
+.at-1 .win .tl-fill.wait, .at-2 .win .tl-fill.prime { transform: scaleX(1); }
+.win .tl-dot.today { left: 30.9%; z-index: 1; box-shadow: 0 0 0 .22em var(--glass), 0 0 0 .35em var(--gold-veil); }
 .at-1 .win .tl-dot.today { animation: pulse 2.2s ease-out 1.4s infinite; }
+.win .tl-pos.today { left: 30.9%; top: 1.5em; transform: translateX(-50%); text-align: center; }
+.win .tl-pos.today b { font-family: var(--font-serif); font-size: 1.15em; color: var(--gold-soft); white-space: nowrap; }
+.win .tl-band { position: absolute; top: 0; left: 40%; right: 0; display: grid; justify-items: center; line-height: 1.3; text-align: center; }
+.win .tl-band b { font-family: var(--font-serif); font-weight: 600; font-size: 1.25em; color: var(--gold-soft); }
+.win .tl-band span { font-size: max(.68em, 11px); color: var(--chalk-dim); }
+.win .tl-pos.m26 { left: 26.3%; }
+.win .tl-pos.m26 .tl-lab { padding-left: .55em; border-left: 1px solid var(--rule); }
+.win-q { display: grid; gap: .15em; margin-top: -.4em; }
+.win-q q { font-family: var(--font-serif); font-weight: 600; font-size: 1.3em; quotes: "“" "”"; }
+.win-q span { font-size: max(.66em, 11px); color: var(--chalk-dim); }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 var(--gold-veil); } 70% { box-shadow: 0 0 0 1.1em transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
 .win .tl-pos.today { left: 26.3%; top: 0; transform: translateX(-50%); text-align: center; }
 .win .tl-pos.today b { font-family: var(--font-serif); font-size: 1.15em; color: var(--gold-soft); white-space: nowrap; }
@@ -478,7 +494,7 @@ h2 {
           <span class="ct-year num">2008</span>
         </h1>
         <p class="ct-sub in" style="--i:4">별명은 무한, <i>Infinite</i></p>
-        <p class="ct-hint in" style="--i:6">→ 키나 화면 오른쪽을 누르면 다음, 왼쪽을 누르면 이전</p>
+        <p class="ct-hint in" id="hint" style="--i:6">→ 키나 화면 오른쪽을 누르면 다음, 왼쪽을 누르면 이전</p>
       </div>
     </section>
 
@@ -649,14 +665,18 @@ h2 {
         </div>
         <div class="win step" data-step="1">
           <div class="tl-pos today"><b>오늘</b></div>
+          <div class="tl-band step" data-step="2"><b>가장 좋은 때</b><span>지금부터 2040년 이후까지</span></div>
           <div class="tl-track">
-            <span class="tl-fill now"></span>
+            <span class="tl-fill wait"></span>
+            <span class="tl-fill prime"></span>
             <span class="tl-dot" style="left:0"></span>
             <span class="tl-dot gold today"></span>
           </div>
-          <div class="tl-pos bot" style="left:0"><div class="tl-lab"><b class="num">2021</b><span>출시</span></div></div>
-          <div class="tl-pos bot endr"><div class="tl-lab"><b class="num">2040</b><span>년 이후까지 좋아요</span></div></div>
+          <div class="tl-pos bot" style="left:0"><div class="tl-lab"><b>2021</b><span>출시</span></div></div>
+          <div class="tl-pos bot m26"><div class="tl-lab"><b>2026</b><span>성숙기 시작</span></div></div>
+          <div class="tl-pos bot endr"><div class="tl-lab"><b>2040+</b><span>이후까지</span></div></div>
         </div>
+        <p class="win-q step" data-step="2"><q>이제 막 성숙기에 들어섰다</q><span>2026년 4월 전 빈티지 시음 평 · “Just entering its maturity phase”</span></p>
       </div>
       <p class="src">출처 · The Finest Bubble, Rare 1976–2015 전 빈티지 시음(2026년 4월)</p>
     </section>
@@ -971,13 +991,17 @@ h2 {
     if (!fromRemote) { lastCheers++; publish(); }
   }
   function moved() { localMoves++; publish(); }
+  /* QR로 들어온 손님은 따라보는 동안 직접 넘기지 않는다(실수로 눌러 어긋나지 않게) */
+  const locked = () => relayOn && !canDrive && syncOn;
   function next() {
+    if (locked()) return;
     const s = slides[cur];
     if (step < maxStep(s)) { step++; applySteps(s, step); moved(); }
     else if (cur < slides.length - 1) { show(cur + 1, false); moved(); }
     else cheers(false);
   }
   function prev() {
+    if (locked()) return;
     const s = slides[cur];
     if (step > 0) { step--; applySteps(s, step); moved(); }
     else if (cur > 0) { show(cur - 1, true); moved(); }
@@ -1026,6 +1050,10 @@ h2 {
       live = linked && syncOn && (room ? peersN > 1 : true);
       long = !syncOn ? '연동 꺼짐' : !live ? '연동 대기' : (room ? '연동 중 · ' + peersN + '대' : '연동 켜짐') + (canDrive ? '' : ' · 따라보기');
       short = !syncOn ? '꺼짐' : !live ? '대기' : room ? peersN + '대' : '켜짐';
+    }
+    if (relayOn && !isHost) {                  /* 손님: 따라보는 동안은 넘김 단추를 감춘다 */
+      prevBtn.hidden = nextBtn.hidden = syncOn;
+      fullBtn.hidden = true;
     }
     syncBtn.hidden = !linked;
     syncBtn.classList.toggle('on', linked && syncOn);
@@ -1111,6 +1139,19 @@ h2 {
   function startRelay() {
     relayOn = true; canDrive = isHost;
     qrBtn.hidden = !(isHost && qrOv.querySelector('svg'));
+    if (!isHost) {
+      const canFull = !!document.fullscreenEnabled;
+      const hint = document.getElementById('hint');
+      if (hint) hint.textContent = canFull ? '진행자가 넘기면 같이 넘어가요 · 화면을 한 번 누르면 전체 화면이 돼요' : '진행자가 넘기면 같이 넘어가요';
+      if (canFull) {                           /* 브라우저는 손이 닿아야 전체 화면을 허락한다: 누를 때마다 전체 화면으로 */
+        const goFull = () => {
+          if (document.fullscreenElement) return;
+          try { const p = deck.requestFullscreen({ navigationUI: 'hide' }); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+        };
+        deck.addEventListener('click', goFull, true);
+        deck.addEventListener('touchend', goFull, true);
+      }
+    }
     renderSync();
     relayConnect();
     setTimeout(settle, 3000);
@@ -1244,6 +1285,7 @@ h2 {
       if ((k === ' ' || k === 'Enter') && document.activeElement && document.activeElement.tagName === 'BUTTON') return;
       e.preventDefault(); keepAwake(); next();
     } else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') { e.preventDefault(); prev(); }
+    else if (locked()) return;
     else if (k === 'Home') { e.preventDefault(); show(0, false); moved(); }
     else if (k === 'End') { e.preventDefault(); show(slides.length - 1, false); moved(); }
     else if (k === 'f' || k === 'F') toggleFull();
