@@ -884,10 +884,10 @@ h2 {
   /* ── 기포 ─────────────────────────────── */
   const cv = document.getElementById('bubbles');
   const ctx = cv.getContext('2d');
-  let W = 0, H = 0, unit = 16, density = 1, bubbles = [], last = 0;
+  let W = 0, H = 0, dpr = 1, unit = 16, density = 1, bubbles = [], last = 0, raf = 0;
   function resize() {
     const r = deck.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
     W = r.width; H = r.height;
     cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -909,7 +909,11 @@ h2 {
     };
   }
   function paint(dt) {
-    ctx.clearRect(0, 0, W, H);
+    /* 매번 배율을 다시 건다: 폰에서 탭이 뒤로 갔다 오면 캔버스 상태가 초기화돼 배율이 풀리는데,
+       그대로 두면 화면 왼쪽 위 1/4만 지워지고 가운데 줄 아래에 기포가 지나간 자국이 쌓인다 */
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     for (const b of bubbles) {
       b.y -= b.vy * dt; b.x += b.vx * dt; b.vx *= Math.max(0, 1 - 1.6 * dt); b.ph += dt * 1.5;
       const x = b.x + Math.sin(b.ph) * b.amp * 0.3;
@@ -921,12 +925,13 @@ h2 {
     }
   }
   function tick(t) {
+    raf = 0;
     const dt = Math.min(0.05, (t - last) / 1000 || 0); last = t;
     bubbles = bubbles.filter((b) => b.y + b.r > -30);
     let ambient = 0; for (const b of bubbles) if (!b.burst) ambient++;
     for (const n = want(); ambient < n; ambient++) bubbles.push(spawn(false));
     paint(dt);
-    if (!document.hidden) requestAnimationFrame(tick);
+    if (!document.hidden) raf = requestAnimationFrame(tick);
   }
   function burst() {
     if (reduce) return;
@@ -942,8 +947,10 @@ h2 {
   }
   resize();
   for (let i = 0, n = want(); i < n; i++) bubbles.push(spawn(true));
-  if (reduce) paint(0); else requestAnimationFrame(tick);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && !reduce) { last = performance.now(); requestAnimationFrame(tick); } });
+  if (reduce) paint(0); else raf = requestAnimationFrame(tick);
+  /* 돌아왔을 때 이미 예약된 프레임이 있으면 또 걸지 않는다(겹쳐 돌지 않게) */
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && !reduce) { last = performance.now(); if (!raf) raf = requestAnimationFrame(tick); } });
+  cv.addEventListener('contextrestored', () => { resize(); if (reduce) paint(0); });
 
   /* ── 넘기기 ───────────────────────────── */
   let cur = 0, step = 0;
